@@ -25,8 +25,8 @@ class ReadsAPI:
     # the latter method is running.
     #########################################
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = ""
+    GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
+    GIT_COMMIT_HASH = "691dc4e56a6b9400e362df03b32582da1d1a98de"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -41,6 +41,39 @@ class ReadsAPI:
         #END_CONSTRUCTOR
         pass
     
+
+    def get_id(self, ctx, params):
+        """
+        Get the name of a Reads object based on its workspace id
+        :param params: instance of type "ReadsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "id" of type
+           "String" (A string representing a Reads object id), parameter "name" of type
+           "String" (A string representing a Reads object name), 
+        :returns: instance of type "String" -> workspace object name
+        """
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'name' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        name = params['name']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token) 
+        try: 
+            # Note that results from the workspace are returned in a list, and the actual data is saved
+            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
+            # look at the 'data' field.
+            objid = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['name']
+            print "objid "+objid
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+        return [objid]
+
     def get_name(self, ctx, params):
         """
         Get the name of a Reads object based on its workspace id
@@ -64,7 +97,8 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            name = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['type']
+            name = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['name']
+            print "name "+name
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -95,15 +129,14 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            type = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['type']
+            objtype = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['type']
+            print "objtype "+objtype
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
-        return [type]
-
-#sequencing_tech
+        return [objtype]
 
     def get_platform(self, ctx, params):
         """
@@ -129,13 +162,13 @@ class ReadsAPI:
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
             platform = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['sequencing_tech']
+            print "platform "+platform
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
         return [platform]
-
 
     def is_single_genome(self, ctx, params):
         """
@@ -161,6 +194,7 @@ class ReadsAPI:
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
             issingle = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['single_genome']
+            print "issingle "+issingle
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -168,194 +202,63 @@ class ReadsAPI:
             raise ValueError('Error from workspace:\n' + orig_error)
         return [issingle]
 
-
-    def filter_contigs(self, ctx, params):
+    def get_insert_size_mean(self, ctx, params):
         """
-        Filter contigs in a ContigSet by DNA length
-        :param params: instance of type "FilterContigsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "contigset_id" of type
-           "contigset_id" (A string representing a ContigSet id.), parameter
-           "min_length" of Long
-        :returns: instance of type "FilterContigsResults" -> structure:
-           parameter "report_name" of String, parameter "report_ref" of
-           String, parameter "new_contigset_ref" of type "ws_contigset_id"
-           (The workspace ID for a ContigSet data object. @id ws
-           KBaseGenomes.ContigSet), parameter "n_initial_contigs" of Long,
-           parameter "n_contigs_removed" of Long, parameter
-           "n_contigs_remaining" of Long
+        Returns the object name for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of Double
         """
         # ctx is the context object
         # return variables are: returnVal
-        #BEGIN filter_contigs
-        
-        # Print statements to stdout/stderr are captured and available as the method log
-        print('Starting filter contigs method.')
-        
-
-        # Step 1 - Parse/examine the parameters and catch any errors
-        # It is important to check that parameters exist and are defined, and that nice error
-        # messages are returned to the user
-        if 'workspace' not in params:
-            raise ValueError('Parameter workspace is not set in input arguments')
-        workspace_name = params['workspace']
-        if 'contigset_id' not in params:
-            raise ValueError('Parameter contigset_id is not set in input arguments')
-        contigset_id = params['contigset_id']
-        if 'min_length' not in params:
-            raise ValueError('Parameter min_length is not set in input arguments')
-        min_length_orig = params['min_length']
-        min_length = None
-        try:
-            min_length = int(min_length_orig)
-        except ValueError:
-            raise ValueError('Cannot parse integer from min_length parameter (' + str(min_length_orig) + ')')
-        if min_length < 0:
-            raise ValueError('min_length parameter shouldn\'t be negative (' + str(min_length) + ')')
-        
-
-        # Step 2- Download the input data
-        # Most data will be based to your method by its workspace name.  Use the workspace to pull that data
-        # (or in many cases, subsets of that data).  The user token is used to authenticate with the KBase
-        # data stores and other services.  DO NOT PRINT OUT OR OTHERWISE SAVE USER TOKENS
-        token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-            contigSet = wsClient.get_objects([{'ref': workspace_name+'/'+contigset_id}])[0]['data']
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error loading original ContigSet object from workspace:\n' + orig_error)
-        
-        print('Got ContigSet data.')
-        
-
-        # Step 3- Actually perform the filter operation, saving the good contigs to a new list
-        good_contigs = []
-        n_total = 0;
-        n_remaining = 0;
-        for contig in contigSet['contigs']:
-            n_total += 1
-            if len(contig['sequence']) >= min_length:
-                good_contigs.append(contig)
-                n_remaining += 1
-
-        # replace the contigs in the contigSet object in local memory
-        contigSet['contigs'] = good_contigs
-        
-        print('Filtered ContigSet to '+str(n_remaining)+' contigs out of '+str(n_total))
-        
-
-        # Step 4- Save the new ContigSet back to the Workspace
-        # When objects are saved, it is important to always set the Provenance of that object.  The basic
-        # provenance info is given to you as part of the context object.  You can add additional information
-        # to the provenance as necessary.  Here we keep a pointer to the input data object.
-        provenance = [{}]
-        if 'provenance' in ctx:
-            provenance = ctx['provenance']
-        # add additional info to provenance here, in this case the input data object reference
-        provenance[0]['input_ws_objects']=[workspace_name+'/'+contigset_id]
-
-        obj_info_list = None
-        try:
-	        obj_info_list = wsClient.save_objects({
-	                            'workspace':workspace_name,
-	                            'objects': [
-	                                {
-	                                    'type':'KBaseGenomes.ContigSet',
-	                                    'data':contigSet,
-	                                    'name':contigset_id,
-	                                    'provenance':provenance
-	                                }
-	                            ]
-	                        })
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error saving filtered ContigSet object to workspace:\n' + orig_error)
-        
-        info = obj_info_list[0]
-        # Workspace Object Info is a tuple defined as-
-        # absolute ref = info[6] + '/' + info[0] + '/' + info[4]
-        # 0 - obj_id objid - integer valued ID of the object
-        # 1 - obj_name name - the name of the data object
-        # 2 - type_string type - the full type of the data object as: [ModuleName].[Type]-v[major_ver].[minor_ver]
-        # 3 - timestamp save_date
-        # 4 - int version - the object version number
-        # 5 - username saved_by
-        # 6 - ws_id wsid - the unique integer valued ID of the workspace containing this object
-        # 7 - ws_name workspace - the workspace name
-        # 8 - string chsum - md5 of the sorted json content
-        # 9 - int size - size of the json content
-        # 10 - usermeta meta - dictionary of string keys/values of user set or auto generated metadata
-
-        print('saved ContigSet:'+pformat(info))
-
-
-        # Step 5- Create the Report for this method, and return the results
-        # Create a Report of the method
-        report = 'New ContigSet saved to: '+str(info[7]) + '/'+str(info[1])+'/'+str(info[4])+'\n'
-        report += 'Number of initial contigs:      '+ str(n_total) + '\n'
-        report += 'Number of contigs removed:      '+ str(n_total - n_remaining) + '\n'
-        report += 'Number of contigs in final set: '+ str(n_remaining) + '\n'
-
-        reportObj = {
-            'objects_created':[{
-                    'ref':str(info[6]) + '/'+str(info[0])+'/'+str(info[4]), 
-                    'description':'Filtered Contigs'
-                }],
-            'text_message':report
-        }
-
-        # generate a unique name for the Method report
-        reportName = 'filter_contigs_report_'+str(hex(uuid.getnode()))
-        report_info_list = None
-        try:
-            report_info_list = wsClient.save_objects({
-                    'id':info[6],
-                    'objects':[
-                        {
-                            'type':'KBaseReport.Report',
-                            'data':reportObj,
-                            'name':reportName,
-                            'meta':{},
-                            'hidden':1, # important!  make sure the report is hidden
-                            'provenance':provenance
-                        }
-                    ]
-                })
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error saving filtered ContigSet object to workspace:\n' + orig_error)
-        
-        report_info = report_info_list[0]
-
-        print('saved Report: '+pformat(report_info))
-
-        returnVal = {
-                'report_name': reportName,
-                'report_ref': str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]),
-                'new_contigset_ref': str(info[6]) + '/'+str(info[0])+'/'+str(info[4]),
-                'n_initial_contigs':n_total,
-                'n_contigs_removed':n_total-n_remaining,
-                'n_contigs_remaining':n_remaining
-            }
-        
-        print('returning:'+pformat(returnVal))
-                
-        #END filter_contigs
+        #BEGIN get_insert_size_mean
+        #END get_insert_size_mean
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
-            raise ValueError('Method filter_contigs return value ' +
-                             'returnVal is not type dict as required.')
+        if not isinstance(returnVal, float):
+            raise ValueError('Method get_insert_size_mean return value ' +
+                             'returnVal is not type float as required.')
+        # return the results
+        return [returnVal]
+
+    def get_insert_size_std_dev(self, ctx, params):
+        """
+        Returns the object name for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of Double
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_insert_size_std_dev
+        #END get_insert_size_std_dev
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, float):
+            raise ValueError('Method get_insert_size_std_dev return value ' +
+                             'returnVal is not type float as required.')
+        # return the results
+        return [returnVal]
+
+    def get_read_orientation_outward(self, ctx, params):
+        """
+        Returns the object name for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of Long
+        """
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_read_orientation_outward
+        #END get_read_orientation_outward
+
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, int):
+            raise ValueError('Method get_read_orientation_outward return value ' +
+                             'returnVal is not type int as required.')
         # return the results
         return [returnVal]
 

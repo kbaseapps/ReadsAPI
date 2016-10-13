@@ -13,21 +13,26 @@ class ReadsAPI:
     '''
     Module Name:
     ReadsAPI
+
     Module Description:
-    
+    A KBase module: ReadsAPI
     '''
-    
+
     ######## WARNING FOR GEVENT USERS #######
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     #########################################
+    VERSION = "0.0.1"
+    GIT_URL = ""
+    GIT_COMMIT_HASH = ""
+    
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
     workspaceURL = None
     #END_CLASS_HEADER
-    
+
     # config contains contents of config file in a hash or None if it couldn't
     # be found
     def __init__(self, config):
@@ -35,8 +40,151 @@ class ReadsAPI:
         self.workspaceURL = config['workspace-url']
         #END_CONSTRUCTOR
         pass
+    
+    def get_name(self, ctx, params):
+        """
+        Get the name of a Reads object based on its workspace id
+        :param params: instance of type "ReadsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "id" of type
+           "String" (A string representing a Reads object id), parameter "name" of type
+           "String" (A string representing a Reads object name), 
+        :returns: instance of type "String" -> workspace object name
+        """
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        contigset_id = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token) 
+        try: 
+            # Note that results from the workspace are returned in a list, and the actual data is saved
+            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
+            # look at the 'data' field.
+            name = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['type']
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+        return [name]
+
+    def get_type(self, ctx, params):
+        """
+        Get the type of a Reads object based on its workspace id
+        :param params: instance of type "ReadsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "id" of type
+           "String" (A string representing a Reads object id), parameter "name" of type
+           "String" (A string representing a Reads object name), 
+        :returns: instance of type "String" -> workspace object type
+        """
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        contigset_id = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token) 
+        try: 
+            # Note that results from the workspace are returned in a list, and the actual data is saved
+            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
+            # look at the 'data' field.
+            type = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['type']
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+        return [type]
+
+#sequencing_tech
+
+    def get_platform(self, ctx, params):
+        """
+        Get the platform of a Reads object based on its workspace id
+        :param params: instance of type "ReadsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "id" of type
+           "String" (A string representing a Reads object id), parameter "name" of type
+           "String" (A string representing a Reads object name), 
+        :returns: instance of type "String" -> reads platform
+        """
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        contigset_id = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token) 
+        try: 
+            # Note that results from the workspace are returned in a list, and the actual data is saved
+            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
+            # look at the 'data' field.
+            platform = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['sequencing_tech']
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+        return [platform]
+
+
+    def is_single_genome(self, ctx, params):
+        """
+        Does the Reads object represent a single genome?
+        :param params: instance of type "ReadsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "id" of type
+           "String" (A string representing a Reads object id), parameter "name" of type
+           "String" (A string representing a Reads object name), 
+        :returns: instance of type "Boolean" -> is single genome
+        """
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        contigset_id = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token) 
+        try: 
+            # Note that results from the workspace are returned in a list, and the actual data is saved
+            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
+            # look at the 'data' field.
+            issingle = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['single_genome']
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+        return [issingle]
+
 
     def filter_contigs(self, ctx, params):
+        """
+        Filter contigs in a ContigSet by DNA length
+        :param params: instance of type "FilterContigsParams" -> structure:
+           parameter "workspace" of type "workspace_name" (A string
+           representing a workspace name.), parameter "contigset_id" of type
+           "contigset_id" (A string representing a ContigSet id.), parameter
+           "min_length" of Long
+        :returns: instance of type "FilterContigsResults" -> structure:
+           parameter "report_name" of String, parameter "report_ref" of
+           String, parameter "new_contigset_ref" of type "ws_contigset_id"
+           (The workspace ID for a ContigSet data object. @id ws
+           KBaseGenomes.ContigSet), parameter "n_initial_contigs" of Long,
+           parameter "n_contigs_removed" of Long, parameter
+           "n_contigs_remaining" of Long
+        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN filter_contigs
@@ -203,10 +351,17 @@ class ReadsAPI:
         print('returning:'+pformat(returnVal))
                 
         #END filter_contigs
-        
+
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, object):
-            raise ValueError('Method count_contigs return value ' +
-                             'returnVal is not type object as required.')
+        if not isinstance(returnVal, dict):
+            raise ValueError('Method filter_contigs return value ' +
+                             'returnVal is not type dict as required.')
         # return the results
+        return [returnVal]
+
+    def status(self, ctx):
+        #BEGIN_STATUS
+        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
+                     'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
+        #END_STATUS
         return [returnVal]

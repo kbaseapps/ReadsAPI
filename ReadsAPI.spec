@@ -1,42 +1,49 @@
 /*
 A KBase module: ReadsAPI
-This sample module contains one small method - filter_contigs.
 */
 
 module ReadsAPI {
-    /*
-        A string representing a ContigSet id.
-    */
-    typedef string contigset_id;
 
-    /*
-        A string representing a workspace name.
-    */
-    typedef string workspace_name;
 
     typedef structure {
-        workspace_name workspace;
-        contigset_id contigset_id;
-        int min_length;
-    } FilterContigsParams;
+        string id;
+        string name;'
+        string workspace_name;
+    } ReadsParams;
 
-    /* 
-        The workspace ID for a ContigSet data object.
-        @id ws KBaseGenomes.ContigSet
-    */
-    typedef string ws_contigset_id;
-
-    typedef structure {
-        string report_name;
-        string report_ref;
-        ws_contigset_id new_contigset_ref;
-        int n_initial_contigs;
-        int n_contigs_removed;
-        int n_contigs_remaining;
-    } FilterContigsResults;
-	
     /*
-        Filter contigs in a ContigSet by DNA length
+        Returns the object name for a Reads object
     */
-    funcdef filter_contigs(FilterContigsParams params) returns (FilterContigsResults) authentication required;
+    funcdef get_name(ReadsParams params) returns (String) authentication required;
+
+    /*
+        Returns the object type for a Reads object
+    */
+    funcdef get_type(ReadsParams params) returns (String) authentication required;
+
+    /*
+        Returns the platform for a Reads object
+    */
+    funcdef get_platform(ReadsParams params) returns (String) authentication required;
+
+    /*
+        Returns the object name for a Reads object
+    */
+    funcdef is_single_genome(ReadsParams params) returns (Boolean) authentication required;
+
+    /*
+        Returns the object name for a Reads object
+    */
+    funcdef get_insert_size_mean(ReadsParams params) returns (Float) authentication required;
+
+    /*
+        Returns the object name for a Reads object
+    */
+    funcdef get_insert_size_std_dev(ReadsParams params) returns (Float) authentication required;
+
+    /*
+        Returns the object name for a Reads object
+    */
+    funcdef get_read_orientation_outward(ReadsParams params) returns (Boolean) authentication required;
+
 };

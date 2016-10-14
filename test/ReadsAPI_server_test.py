@@ -87,6 +87,10 @@ class ReadsAPITest(unittest.TestCase):
         readssetparams['workspace_name'] = 'marcin:1475008857456'
         readssetparams['name'] = 'test_SRR400615_1000'
         
+        objid = self.getImpl().get_id(self.getContext(),readssetparams)
+        
+        readssetparams['id'] = objid
+
         result = self.getImpl().get_name(self.getContext(),readssetparams)
         print('RESULT:')
         pprint(result)

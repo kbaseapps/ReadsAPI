@@ -52,6 +52,10 @@ class ReadsAPI:
            "String" (A string representing a Reads object name), 
         :returns: instance of type "String" -> workspace object name
         """
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_id
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -65,13 +69,19 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            objid = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['name']
-            print "objid "+objid
+            objid = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+name}],
+                "includeMetadata": 0,
+                "ignoreErrors": 0})[0][0]
+            print "objid "+str(objid)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
+
+        #END get_id
+
+        # return the results
         return [objid]
 
     def get_name(self, ctx, params):
@@ -84,12 +94,17 @@ class ReadsAPI:
            "String" (A string representing a Reads object name), 
         :returns: instance of type "String" -> workspace object name
         """
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_name
+
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
         if 'id' not in params:
             raise ValueError('Parameter id is not set in input arguments')
-        contigset_id = params['id']
+        objid = params['id']
 
         token = ctx['token']
         wsClient = workspaceService(self.workspaceURL, token=token) 
@@ -97,13 +112,19 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            name = wsClient.get_name([{'ref': workspace_name+'/'+id}])[0]['name']
+                    
+            name = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
+                "includeMetadata": 0,
+                "ignoreErrors": 0})[0][1]
             print "name "+name
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
+
+        #END get_name
+
         return [name]
 
     def get_type(self, ctx, params):
@@ -116,12 +137,17 @@ class ReadsAPI:
            "String" (A string representing a Reads object name), 
         :returns: instance of type "String" -> workspace object type
         """
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_type
+
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
         if 'id' not in params:
             raise ValueError('Parameter id is not set in input arguments')
-        contigset_id = params['id']
+        objid = params['id']
 
         token = ctx['token']
         wsClient = workspaceService(self.workspaceURL, token=token) 
@@ -129,13 +155,18 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            objtype = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['type']
+            objtype = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
+                "includeMetadata": 0,
+                "ignoreErrors": 0})[0][2]
             print "objtype "+objtype
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
+
+        #END get_type
+
         return [objtype]
 
     def get_platform(self, ctx, params):
@@ -148,6 +179,11 @@ class ReadsAPI:
            "String" (A string representing a Reads object name), 
         :returns: instance of type "String" -> reads platform
         """
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN get_platform
+
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -168,6 +204,9 @@ class ReadsAPI:
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
+
+        #END get_platform
+
         return [platform]
 
     def is_single_genome(self, ctx, params):
@@ -180,6 +219,11 @@ class ReadsAPI:
            "String" (A string representing a Reads object name), 
         :returns: instance of type "Boolean" -> is single genome
         """
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN is_single_genome
+
         if 'workspace_name' not in params:
             raise ValueError('Parameter workspace_name is not set in input arguments')
         workspace_name = params['workspace_name']
@@ -200,6 +244,9 @@ class ReadsAPI:
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error from workspace:\n' + orig_error)
+
+        #END is_single_genome
+
         return [issingle]
 
     def get_insert_size_mean(self, ctx, params):

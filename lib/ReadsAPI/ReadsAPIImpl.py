@@ -76,7 +76,7 @@ class ReadsAPI:
 
     def get_name(self, ctx, params):
         """
-        Get the name of a Reads object based on its workspace id
+        Get the name of a Reads object based on its works  pace id
         :param params: instance of type "ReadsParams" -> structure:
            parameter "workspace" of type "workspace_name" (A string
            representing a workspace name.), parameter "id" of type
@@ -216,11 +216,11 @@ class ReadsAPI:
         #END get_insert_size_mean
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, float):
-            raise ValueError('Method get_insert_size_mean return value ' +
+        #if not isinstance(returnVal, float):
+        #    raise ValueError('Method get_insert_size_mean return value ' +
                              'returnVal is not type float as required.')
         # return the results
-        return [returnVal]
+        #return [returnVal]
 
     def get_insert_size_std_dev(self, ctx, params):
         """
@@ -236,11 +236,11 @@ class ReadsAPI:
         #END get_insert_size_std_dev
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, float):
-            raise ValueError('Method get_insert_size_std_dev return value ' +
+        #if not isinstance(returnVal, float):
+        #    raise ValueError('Method get_insert_size_std_dev return value ' +
                              'returnVal is not type float as required.')
         # return the results
-        return [returnVal]
+        #return [returnVal]
 
     def get_read_orientation_outward(self, ctx, params):
         """
@@ -256,11 +256,11 @@ class ReadsAPI:
         #END get_read_orientation_outward
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, int):
-            raise ValueError('Method get_read_orientation_outward return value ' +
+        #if not isinstance(returnVal, int):
+        #    raise ValueError('Method get_read_orientation_outward return value ' +
                              'returnVal is not type int as required.')
         # return the results
-        return [returnVal]
+        #return [returnVal]
 
     def status(self, ctx):
         #BEGIN_STATUS

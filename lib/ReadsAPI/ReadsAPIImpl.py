@@ -26,7 +26,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "691dc4e56a6b9400e362df03b32582da1d1a98de"
+    GIT_COMMIT_HASH = "459a5bddb68641fd434b3670bceec773f5b55749"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -44,15 +44,12 @@ class ReadsAPI:
 
     def get_id(self, ctx, params):
         """
-        Get the name of a Reads object based on its workspace id
-        :param params: instance of type "ReadsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "id" of type
-           "String" (A string representing a Reads object id), parameter "name" of type
-           "String" (A string representing a Reads object name), 
-        :returns: instance of type "String" -> workspace object name
+        Returns the object id for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of Long
         """
-
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_id
@@ -69,10 +66,10 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            objid = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+name}],
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+name}],
                 "includeMetadata": 0,
                 "ignoreErrors": 0})[0][0]
-            print "objid "+str(objid)
+            print "objid "+str(returnVal)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -81,20 +78,21 @@ class ReadsAPI:
 
         #END get_id
 
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, int):
+            raise ValueError('Method get_id return value ' +
+                             'returnVal is not type int as required.')
         # return the results
-        return [objid]
+        return [returnVal]
 
     def get_name(self, ctx, params):
         """
-        Get the name of a Reads object based on its works  pace id
-        :param params: instance of type "ReadsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "id" of type
-           "String" (A string representing a Reads object id), parameter "name" of type
-           "String" (A string representing a Reads object name), 
-        :returns: instance of type "String" -> workspace object name
+        Returns the object name for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of String
         """
-
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_name
@@ -113,10 +111,11 @@ class ReadsAPI:
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
                     
-            name = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
+            print "ref"+ workspace_name+'/'+str(objid)
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+str(objid[0])}],
                 "includeMetadata": 0,
                 "ignoreErrors": 0})[0][1]
-            print "name "+name
+            print "name "+returnVal
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -125,19 +124,21 @@ class ReadsAPI:
 
         #END get_name
 
-        return [name]
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, basestring):
+            raise ValueError('Method get_name return value ' +
+                             'returnVal is not type basestring as required.')
+        # return the results
+        return [returnVal]
 
     def get_type(self, ctx, params):
         """
-        Get the type of a Reads object based on its workspace id
-        :param params: instance of type "ReadsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "id" of type
-           "String" (A string representing a Reads object id), parameter "name" of type
-           "String" (A string representing a Reads object name), 
-        :returns: instance of type "String" -> workspace object type
+        Returns the object type for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of String
         """
-
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_type
@@ -155,10 +156,10 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            objtype = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
                 "includeMetadata": 0,
                 "ignoreErrors": 0})[0][2]
-            print "objtype "+objtype
+            print "objtype "+returnVal
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -167,19 +168,21 @@ class ReadsAPI:
 
         #END get_type
 
-        return [objtype]
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, basestring):
+            raise ValueError('Method get_type return value ' +
+                             'returnVal is not type basestring as required.')
+        # return the results
+        return [returnVal]
 
     def get_platform(self, ctx, params):
         """
-        Get the platform of a Reads object based on its workspace id
-        :param params: instance of type "ReadsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "id" of type
-           "String" (A string representing a Reads object id), parameter "name" of type
-           "String" (A string representing a Reads object name), 
-        :returns: instance of type "String" -> reads platform
+        Returns the platform for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of String
         """
-
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_platform
@@ -197,8 +200,8 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            platform = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['sequencing_tech']
-            print "platform "+platform
+            returnVal = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['sequencing_tech']
+            print "platform "+returnVal
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -207,19 +210,21 @@ class ReadsAPI:
 
         #END get_platform
 
-        return [platform]
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, basestring):
+            raise ValueError('Method get_platform return value ' +
+                             'returnVal is not type basestring as required.')
+        # return the results
+        return [returnVal]
 
     def is_single_genome(self, ctx, params):
         """
-        Does the Reads object represent a single genome?
-        :param params: instance of type "ReadsParams" -> structure:
-           parameter "workspace" of type "workspace_name" (A string
-           representing a workspace name.), parameter "id" of type
-           "String" (A string representing a Reads object id), parameter "name" of type
-           "String" (A string representing a Reads object name), 
-        :returns: instance of type "Boolean" -> is single genome
+        Returns the object name for a Reads object
+        :param params: instance of type "ReadsParams" -> structure: parameter
+           "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String
+        :returns: instance of Long
         """
-
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN is_single_genome
@@ -237,7 +242,7 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list, and the actual data is saved
             # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
             # look at the 'data' field.
-            issingle = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['single_genome']
+            returnVal = wsClient.returnVal([{'ref': workspace_name+'/'+id}])[0]['single_genome']
             print "issingle "+issingle
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -247,7 +252,12 @@ class ReadsAPI:
 
         #END is_single_genome
 
-        return [issingle]
+        # At some point might do deeper type checking...
+        if not isinstance(returnVal, int):
+            raise ValueError('Method is_single_genome return value ' +
+                             'returnVal is not type int as required.')
+        # return the results
+        return [returnVal]
 
     def get_insert_size_mean(self, ctx, params):
         """
@@ -263,11 +273,11 @@ class ReadsAPI:
         #END get_insert_size_mean
 
         # At some point might do deeper type checking...
-        #if not isinstance(returnVal, float):
-        #    raise ValueError('Method get_insert_size_mean return value ' +
+        if not isinstance(returnVal, float):
+            raise ValueError('Method get_insert_size_mean return value ' +
                              'returnVal is not type float as required.')
         # return the results
-        #return [returnVal]
+        return [returnVal]
 
     def get_insert_size_std_dev(self, ctx, params):
         """
@@ -283,11 +293,11 @@ class ReadsAPI:
         #END get_insert_size_std_dev
 
         # At some point might do deeper type checking...
-        #if not isinstance(returnVal, float):
-        #    raise ValueError('Method get_insert_size_std_dev return value ' +
+        if not isinstance(returnVal, float):
+            raise ValueError('Method get_insert_size_std_dev return value ' +
                              'returnVal is not type float as required.')
         # return the results
-        #return [returnVal]
+        return [returnVal]
 
     def get_read_orientation_outward(self, ctx, params):
         """
@@ -303,11 +313,11 @@ class ReadsAPI:
         #END get_read_orientation_outward
 
         # At some point might do deeper type checking...
-        #if not isinstance(returnVal, int):
-        #    raise ValueError('Method get_read_orientation_outward return value ' +
+        if not isinstance(returnVal, int):
+            raise ValueError('Method get_read_orientation_outward return value ' +
                              'returnVal is not type int as required.')
         # return the results
-        #return [returnVal]
+        return [returnVal]
 
     def status(self, ctx):
         #BEGIN_STATUS

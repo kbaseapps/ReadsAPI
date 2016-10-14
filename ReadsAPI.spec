@@ -15,7 +15,7 @@ module ReadsAPI {
     /*
         Returns the object id for a Reads object
     */
-    funcdef get_id(ReadsParams params) returns (string) authentication required;
+    funcdef get_id(ReadsParams params) returns (int) authentication required;
 
     /*
         Returns the object name for a Reads object

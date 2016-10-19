@@ -72,13 +72,14 @@ class ReadsAPITest(unittest.TestCase):
         return self.__class__.ctx
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.
+
     def test_get_id_ok(self):
         readssetparams = {}
         readssetparams['workspace_name'] = 'marcin:1475008857456'
         readssetparams['name'] = 'test_SRR400615_1000'
         
         result = self.getImpl().get_id(self.getContext(),readssetparams)
-        print('RESULT:')
+        print('RESULT test_get_id_ok:')
         pprint(result)
 
     
@@ -89,11 +90,65 @@ class ReadsAPITest(unittest.TestCase):
         
         objid = self.getImpl().get_id(self.getContext(),readssetparams)
         
-        readssetparams['id'] = objid
+        readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_name(self.getContext(),readssetparams)
-        print('RESULT:')
+        print('RESULT test_get_name_ok:')
         pprint(result)
 
         #self.assertEqual(ret[0]['n_contigs_remaining'], 2)
 
+
+    def test_get_platform_ok(self):
+        readssetparams = {}
+        readssetparams['workspace_name'] = 'marcin:1475008857456'
+        readssetparams['name'] = 'test_SRR400615_1000'
+
+        objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+        readssetparams['id'] = objid[0]
+
+        result = self.getImpl().get_platform(self.getContext(), readssetparams)
+        print('RESULT test_get_platform_ok:')
+        pprint(result)
+
+    def test_is_single_genome_ok(self):
+        readssetparams = {}
+        readssetparams['workspace_name'] = 'marcin:1475008857456'
+        readssetparams['name'] = 'test_SRR400615_1000'
+
+        objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+        readssetparams['id'] = objid[0]
+
+        result = self.getImpl().is_single_genome(self.getContext(), readssetparams)
+        print('RESULT test_is_single_genome_ok:')
+        pprint(result)
+
+    def test_get_type_ok(self):
+        readssetparams = {}
+
+        readssetparams['workspace_name'] = 'marcin:1475008857456'
+        readssetparams['name'] = 'test_SRR400615_1000'
+
+        objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+        readssetparams['id'] = objid[0]
+
+        result = self.getImpl().get_type(self.getContext(), readssetparams)
+        print('RESULT test_get_type_ok:')
+        pprint(result)
+
+    #def test_get_insert_size_std_dev_ok(self):
+    #    readssetparams = {}
+
+     #   readssetparams['workspace_name'] = 'marcin:1475008857456'
+     #   readssetparams['name'] = 'ERR000916'
+
+     #   objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+     #   readssetparams['id'] = objid[0]
+
+     #   result = self.getImpl().get_insert_size_std_dev(self.getContext(), readssetparams)
+     #   print('RESULT test_get_insert_size_std_dev_ok:')
+     #   pprint(result)

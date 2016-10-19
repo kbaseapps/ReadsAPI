@@ -26,7 +26,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "459a5bddb68641fd434b3670bceec773f5b55749"
+    GIT_COMMIT_HASH = "19f9946bec02d7e94aabd56de067287b7e254d6d"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -61,15 +61,13 @@ class ReadsAPI:
         name = params['name']
 
         token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+name}],
-                "includeMetadata": 0,
-                "ignoreErrors": 0})[0][0]
-            print "objid "+str(returnVal)
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name + '/' + name}],
+                                                      "includeMetadata": 0,
+                                                      "ignoreErrors": 0})[0][0]
+            #print "get_id objid "+str(returnVal)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -105,17 +103,14 @@ class ReadsAPI:
         objid = params['id']
 
         token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-                    
-            print "ref"+ workspace_name+'/'+str(objid)
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+str(objid[0])}],
-                "includeMetadata": 0,
-                "ignoreErrors": 0})[0][1]
-            print "name "+returnVal
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+            #Note that results from the workspace are returned in a list
+            #print "get_name ref"+ workspace_name+'/'+str(objid)
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name + '/' + str(objid)}],
+                                                      "includeMetadata": 0,
+                                                      "ignoreErrors": 0})[0][1]
+            #print "get_name name "+returnVal
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -150,16 +145,18 @@ class ReadsAPI:
             raise ValueError('Parameter id is not set in input arguments')
         objid = params['id']
 
+        #print "get_type objid "+str(objid)
         token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_name+'/'+objid}],
-                "includeMetadata": 0,
-                "ignoreErrors": 0})[0][2]
-            print "objtype "+returnVal
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+            objref = workspace_name + '/' + str(objid)
+            #print "get_type "+objref
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": objref}]})[0][2]
+            #,"includeMetadata": 0,
+            #"ignoreErrors": 0
+
+            #print "get_type objtype "+returnVal
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -192,16 +189,28 @@ class ReadsAPI:
         workspace_name = params['workspace_name']
         if 'id' not in params:
             raise ValueError('Parameter id is not set in input arguments')
-        contigset_id = params['id']
+        objid = params['id']
+
+        #print "get_platform objid " + str(objid)
 
         token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-            returnVal = wsClient.get_type([{'ref': workspace_name+'/'+id}])[0]['sequencing_tech']
-            print "platform "+returnVal
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+
+            objref = workspace_name + '/' + str(objid)
+            #print "get_platform "+objref
+
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_objects([{"ref": objref}])[0]
+            #_mock.get_objects([{'ref': '10/1'}, {'ref': '10/2'}])
+
+            #print "get_platform returnVal "+str(returnVal)
+
+            if returnVal is not None:
+                if returnVal['data']['sequencing_tech'] is not None:
+                    returnVal = returnVal['data']['sequencing_tech']
+
+                    #print "get_platform platform "+str(returnVal)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -234,16 +243,22 @@ class ReadsAPI:
         workspace_name = params['workspace_name']
         if 'id' not in params:
             raise ValueError('Parameter id is not set in input arguments')
-        contigset_id = params['id']
+        objid = params['id']
 
         token = ctx['token']
-        wsClient = workspaceService(self.workspaceURL, token=token) 
-        try: 
-            # Note that results from the workspace are returned in a list, and the actual data is saved
-            # in the 'data' key.  So to get the ContigSet data, we get the first element of the list, and
-            # look at the 'data' field.
-            returnVal = wsClient.returnVal([{'ref': workspace_name+'/'+id}])[0]['single_genome']
-            print "issingle "+issingle
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+
+            objref = workspace_name + '/' + str(objid)
+
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_objects([{'ref': objref}])[0]
+
+            if returnVal is not None:
+                if returnVal['data']['single_genome'] is not None:
+                    returnVal = returnVal['data']['single_genome']
+
+                    #print "is_single_genome issingle "+str(returnVal)
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -270,6 +285,36 @@ class ReadsAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_insert_size_mean
+
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        objid = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+
+            objref = workspace_name + '/' + str(objid)
+
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_objects([{'ref': objref}])[0]
+
+            print "get_insert_size_mean returnVal " + str(returnVal)
+
+            if returnVal is not None:
+                if returnVal['data']['single_genome'] is not None:
+                    returnVal = returnVal['data']['single_genome']
+
+                    # print "is_single_genome issingle " + str(returnVal)
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+
         #END get_insert_size_mean
 
         # At some point might do deeper type checking...
@@ -290,6 +335,44 @@ class ReadsAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_insert_size_std_dev
+
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        objid = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token)
+
+        returnVal = 'NA' #None
+
+        try:
+
+            objref = workspace_name + '/' + str(objid)
+            readssetparams = {}
+            readssetparams['workspace_name'] = workspace_name
+            readssetparams['id'] = objid
+
+            objtype = self.get_type(ctx, readssetparams)
+            print "get_insert_size_std_dev objtype " + objtype[0]
+            if objtype[0] == 'KBaseFile.PairedEndLibrary-2.0':
+
+                # Note that results from the workspace are returned in a list
+                returnVal = wsClient.get_objects([{'ref': objref}])[0]
+                print "get_insert_size_std_dev " + str(returnVal)
+                if returnVal is not None:
+                    print returnVal['data']['insert_size_std_dev']
+                    returnVal = returnVal['data']['insert_size_std_dev']
+
+                print "get_insert_size_std_dev insert_size_std_dev returnVal " + str(returnVal)
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+
         #END get_insert_size_std_dev
 
         # At some point might do deeper type checking...
@@ -297,7 +380,7 @@ class ReadsAPI:
             raise ValueError('Method get_insert_size_std_dev return value ' +
                              'returnVal is not type float as required.')
         # return the results
-        return [returnVal]
+        return returnVal
 
     def get_read_orientation_outward(self, ctx, params):
         """
@@ -310,6 +393,34 @@ class ReadsAPI:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN get_read_orientation_outward
+
+        if 'workspace_name' not in params:
+            raise ValueError('Parameter workspace_name is not set in input arguments')
+        workspace_name = params['workspace_name']
+        if 'id' not in params:
+            raise ValueError('Parameter id is not set in input arguments')
+        objid = params['id']
+
+        token = ctx['token']
+        wsClient = workspaceService(self.workspaceURL, token=token)
+        try:
+
+            objref = workspace_name + '/' + str(objid)
+
+            # Note that results from the workspace are returned in a list
+            returnVal = wsClient.get_objects([{'ref': objref}])[0]
+
+            if returnVal is not None:
+                if returnVal['data']['single_genome'] is not None:
+                    returnVal = returnVal['data']['single_genome']
+
+            print "is_single_genome issingle " + str(returnVal)
+        except:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+            orig_error = ''.join('    ' + line for line in lines)
+            raise ValueError('Error from workspace:\n' + orig_error)
+
         #END get_read_orientation_outward
 
         # At some point might do deeper type checking...
@@ -321,7 +432,7 @@ class ReadsAPI:
 
     def status(self, ctx):
         #BEGIN_STATUS
-        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
+        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION,
                      'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
         #END_STATUS
         return [returnVal]

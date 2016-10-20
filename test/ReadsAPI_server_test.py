@@ -99,7 +99,7 @@ class ReadsAPITest(unittest.TestCase):
         #self.assertEqual(ret[0]['n_contigs_remaining'], 2)
 
 
-    def test_get_platform_ok(self):
+    def test_get_sequencing_tech_ok(self):
         readssetparams = {}
         readssetparams['workspace_name'] = 'marcin:1475008857456'
         readssetparams['name'] = 'test_SRR400615_1000'
@@ -108,11 +108,11 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams['id'] = objid[0]
 
-        result = self.getImpl().get_platform(self.getContext(), readssetparams)
+        result = self.getImpl().get_sequencing_tech(self.getContext(), readssetparams)
         print('RESULT test_get_platform_ok:')
         pprint(result)
 
-    def test_is_single_genome_ok(self):
+    def test_single_genome_ok(self):
         readssetparams = {}
         readssetparams['workspace_name'] = 'marcin:1475008857456'
         readssetparams['name'] = 'test_SRR400615_1000'
@@ -121,8 +121,8 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams['id'] = objid[0]
 
-        result = self.getImpl().is_single_genome(self.getContext(), readssetparams)
-        print('RESULT test_is_single_genome_ok:')
+        result = self.getImpl().single_genome(self.getContext(), readssetparams)
+        print('RESULT test_single_genome_ok:')
         pprint(result)
 
     def test_get_type_ok(self):
@@ -139,16 +139,31 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_type_ok:')
         pprint(result)
 
-    #def test_get_insert_size_std_dev_ok(self):
+
+    def test_get_reads_info_ok(self):
+        readssetparams = {}
+
+        readssetparams['workspace_name'] = 'marcin:1475008857456'
+        readssetparams['name'] = 'ERR000916'
+
+        objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+        readssetparams['id'] = objid[0]
+
+        result = self.getImpl().get_reads_info(self.getContext(), readssetparams)
+        print('RESULT test_get_reads_info_ok:')
+        pprint(result)
+
+    #def test_get_reads_info_all_ok(self):
     #    readssetparams = {}
 
-     #   readssetparams['workspace_name'] = 'marcin:1475008857456'
-     #   readssetparams['name'] = 'ERR000916'
+    #    readssetparams['workspace_name'] = 'marcin:1475008857456'
+    #    readssetparams['name'] = 'ERR000916'
 
-     #   objid = self.getImpl().get_id(self.getContext(), readssetparams)
+    #    objid = self.getImpl().get_id(self.getContext(), readssetparams)
 
-     #   readssetparams['id'] = objid[0]
+    #    readssetparams['id'] = objid[0]
 
-     #   result = self.getImpl().get_insert_size_std_dev(self.getContext(), readssetparams)
-     #   print('RESULT test_get_insert_size_std_dev_ok:')
-     #   pprint(result)
+    #    result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
+    #    print('RESULT test_get_reads_info_ok:')
+    #    pprint(result)

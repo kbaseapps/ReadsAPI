@@ -82,6 +82,8 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_id_ok:')
         pprint(result)
 
+        self.assertEqual(result, [10])
+
     
     def test_get_name_ok(self):
         readssetparams = {}
@@ -96,7 +98,7 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_name_ok:')
         pprint(result)
 
-        #self.assertEqual(ret[0]['n_contigs_remaining'], 2)
+        self.assertEqual(result,[u'test_SRR400615_1000'])
 
 
     def test_get_sequencing_tech_ok(self):
@@ -112,6 +114,8 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_platform_ok:')
         pprint(result)
 
+        self.assertEqual(result, [u'Illumina'])
+
     def test_single_genome_ok(self):
         readssetparams = {}
         readssetparams['workspace_name'] = 'marcin:1475008857456'
@@ -124,6 +128,8 @@ class ReadsAPITest(unittest.TestCase):
         result = self.getImpl().single_genome(self.getContext(), readssetparams)
         print('RESULT test_single_genome_ok:')
         pprint(result)
+
+        self.assertEqual(result, [1])
 
     def test_get_type_ok(self):
         readssetparams = {}
@@ -138,6 +144,8 @@ class ReadsAPITest(unittest.TestCase):
         result = self.getImpl().get_type(self.getContext(), readssetparams)
         print('RESULT test_get_type_ok:')
         pprint(result)
+
+        self.assertEqual(result, [u'KBaseFile.SingleEndLibrary-2.0'])
 
 
     def test_get_reads_info_ok(self):

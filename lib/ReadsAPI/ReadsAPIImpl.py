@@ -451,7 +451,7 @@ class ReadsAPI:
             # Note that results from the workspace are returned in a list
             returnVal = wsClient.get_objects([{'ref': objref}])[0]
 
-            print "get_reads_info_all "+ returnVal
+            #print "get_reads_info_all "+ str(returnVal)
 
             info['id'] = returnVal['info'][0]  #['id']
             info['name'] = returnVal['info'][1]  #['name']
@@ -468,16 +468,18 @@ class ReadsAPI:
             else:
                 info['single_genome'] = ""
 
+###strain and source currently not specified in example data
+            #if returnVal['data']['strain'] is not None:
+            #    info['strain'] = returnVal['data']['strain']
+            #else:
+            #    info['strain'] = ""
+            info['strain'] = ""
 
-            if returnVal['data']['strain'] is not None:
-                info['strain'] = returnVal['data']['strain']
-            else:
-                info['strain'] = ""
-
-            if returnVal['data']['source'] is not None:
-                info['source'] = returnVal['data']['source']
-            else:
-                info['source'] = ""
+            #if returnVal['data']['source'] is not None:
+            #    info['source'] = returnVal['data']['source']
+            #else:
+            #    info['source'] = ""
+            info['source'] = ""
 
             if returnVal['data']['read_count'] is not None:
                 info['read_count'] = returnVal['data']['read_count']
@@ -534,8 +536,8 @@ class ReadsAPI:
             else:
                 info['qual_stdev'] = ""
 
-            if returnVal['data']['duplicate_perc'] is not None:
-                info['duplicate_perc'] = returnVal['data']['duplicate_perc']
+            if returnVal['data']['number_of_duplicates'] is not None and returnVal['data']['read_count'] is not None:
+                info['duplicate_perc'] = returnVal['data']['number_of_duplicates']/info['read_count']
             else:
                 info['duplicate_perc'] = ""
 
@@ -544,8 +546,7 @@ class ReadsAPI:
             else:
                 info['base_percentages'] = ""
 
-
-
+###optional for paired end
             if returnVal['data']['insert_size_mean'] is not None:
                 info['insert_size_mean'] = returnVal['data']['insert_size_mean']
             else:
@@ -557,7 +558,7 @@ class ReadsAPI:
                 info['insert_size_std_dev'] = ""
 
             if 'read_orientation_outward' in returnVal['data']:
-                if returnVal['data']['read_orientation'] is not None:
+                if returnVal['data']['read_orientation_outward'] is not None:
                     info['read_orientation_outward'] = returnVal['data']['read_orientation_outward']
                 else:
                     info['read_orientation_outward'] = ""

@@ -154,7 +154,22 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_ok:')
         pprint(result)
 
-    #def test_get_reads_info_all_ok(self):
+    def test_get_reads_info_all_ok(self):
+        readssetparams = {}
+
+        readssetparams['workspace_name'] = 'kbasetest:1477429140721'
+        readssetparams['name'] = 'test_paired_reads_eautils'
+
+        objid = self.getImpl().get_id(self.getContext(), readssetparams)
+
+        readssetparams['id'] = objid[0]
+
+        result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
+        print('RESULT test_get_reads_info_all_ok:')
+        pprint(result)
+
+
+            #def test_get_reads_info_all_ok(self):
     #    readssetparams = {}
 
     #    readssetparams['workspace_name'] = 'marcin:1475008857456'

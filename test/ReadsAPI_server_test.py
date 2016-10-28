@@ -101,36 +101,6 @@ class ReadsAPITest(unittest.TestCase):
         self.assertEqual(result,[u'test_SRR400615_1000'])
 
 
-    def test_get_sequencing_tech_ok(self):
-        readssetparams = {}
-        readssetparams['workspace_name'] = 'marcin:1475008857456'
-        readssetparams['name'] = 'test_SRR400615_1000'
-
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
-
-        result = self.getImpl().get_sequencing_tech(self.getContext(), readssetparams)
-        print('RESULT test_get_platform_ok:')
-        pprint(result)
-
-        self.assertEqual(result, [u'Illumina'])
-
-    def test_single_genome_ok(self):
-        readssetparams = {}
-        readssetparams['workspace_name'] = 'marcin:1475008857456'
-        readssetparams['name'] = 'test_SRR400615_1000'
-
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
-
-        result = self.getImpl().single_genome(self.getContext(), readssetparams)
-        print('RESULT test_single_genome_ok:')
-        pprint(result)
-
-        self.assertEqual(result, [1])
-
     def test_get_type_ok(self):
         readssetparams = {}
 
@@ -175,18 +145,3 @@ class ReadsAPITest(unittest.TestCase):
         result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_all_ok:')
         pprint(result)
-
-
-            #def test_get_reads_info_all_ok(self):
-    #    readssetparams = {}
-
-    #    readssetparams['workspace_name'] = 'marcin:1475008857456'
-    #    readssetparams['name'] = 'ERR000916'
-
-    #    objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-    #    readssetparams['id'] = objid[0]
-
-    #    result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
-    #    print('RESULT test_get_reads_info_ok:')
-    #    pprint(result)

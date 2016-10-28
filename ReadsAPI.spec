@@ -57,10 +57,10 @@ module ReadsAPI {
        string workspace_name - name of workspace
        string workspace_type - type of object
        string sequencing_tech - technological platform used to generate data in this object
-       int single_genome -
-       float insert_size_mean -
-       float insert_size_std_dev -
-       int read_orientation_outward -
+       string single_genome -
+       string insert_size_mean -
+       string insert_size_std_dev -
+       string read_orientation_outward -
 
        @optional sequencing_tech single_genome insert_size_mean insert_size_std_dev read_orientation_outward
 
@@ -71,10 +71,10 @@ module ReadsAPI {
         string workspace_name;
         string workspace_type;
         string sequencing_tech;
-        int single_genome;
-        float insert_size_mean;
-        float insert_size_std_dev;
-        int read_orientation_outward;
+        string single_genome;
+        string insert_size_mean;
+        string insert_size_std_dev;
+        string read_orientation_outward;
     } ReadsInfo;
 
 
@@ -96,26 +96,26 @@ module ReadsAPI {
        string strain -
        string source -
 
-       int read_count -
-       int read_size -
-       float gc_content -
-       float read_length_mean -
-       float read_length_stdev -
-       float phred_type -
-       int number_of_duplicates -
-       float qual_min -
-       float qual_max -
-       float qual_mean -
-       float qual_stdev -
-       float base_percentages -
-       float duplicate_perc -
+       string read_count -
+       string read_size -
+       string gc_content -
+       string read_length_mean -
+       string read_length_stdev -
+       string phred_type -
+       string number_of_duplicates -
+       string qual_min -
+       string qual_max -
+       string qual_mean -
+       string qual_stdev -
+       string base_percentages -
+       string duplicate_perc -
 
-       int interleaved -
-       float insert_size_mean -
-       float insert_size_std_dev -
-       int read_orientation_outward -
+       string interleaved -
+       string insert_size_mean -
+       string insert_size_std_dev -
+       string read_orientation_outward -
 
-       mapping<string, float> base_percentages -
+       mapping<string, string> base_percentages -
 
        @optional gc_content source strain read_count read_size single_genome
        @optional read_length_mean read_length_stdev phred_type
@@ -136,25 +136,25 @@ module ReadsAPI {
         string strain;
         string source;
 
-        int read_count;
-        int read_size;
-        float gc_content;
-        float read_length_mean;
-        float read_length_stdev;
-        float phred_type;
-        int number_of_duplicates;
-        float qual_min;
-        float qual_max;
-        float qual_mean;
-        float qual_stdev;
-        float duplicate_perc;
+        string read_count;
+        string read_size;
+        string gc_content;
+        string read_length_mean;
+        string read_length_stdev;
+        string phred_type;
+        string number_of_duplicates;
+        string qual_min;
+        string qual_max;
+        string qual_mean;
+        string qual_stdev;
+        string duplicate_perc;
 
-        int interleaved;
-        float insert_size_mean;
-        float insert_size_std_dev;
-        int read_orientation_outward;
+        string interleaved;
+        string insert_size_mean;
+        string insert_size_std_dev;
+        string read_orientation_outward;
 
-        mapping<string, float> base_percentages;
+        mapping<string, string> base_percentages;
     } ReadsInfoAll;
 
 

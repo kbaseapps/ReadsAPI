@@ -26,7 +26,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "3a11762847c97f5a786b78b02b5fa8fa1799878f"
+    GIT_COMMIT_HASH = "7fe1726d8fcaada4d8ffee5ededc08510c9dd00b"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -291,15 +291,16 @@ class ReadsAPI:
            object string name - name of object string workspace_name - name
            of workspace string workspace_type - type of object string
            sequencing_tech - technological platform used to generate data in
-           this object int single_genome - float insert_size_mean - float
-           insert_size_std_dev - int read_orientation_outward - @optional
-           sequencing_tech single_genome insert_size_mean insert_size_std_dev
-           read_orientation_outward) -> structure: parameter "id" of String,
-           parameter "name" of String, parameter "workspace_name" of String,
-           parameter "workspace_type" of String, parameter "sequencing_tech"
-           of String, parameter "single_genome" of Long, parameter
-           "insert_size_mean" of Double, parameter "insert_size_std_dev" of
-           Double, parameter "read_orientation_outward" of Long
+           this object string single_genome - string insert_size_mean -
+           string insert_size_std_dev - string read_orientation_outward -
+           @optional sequencing_tech single_genome insert_size_mean
+           insert_size_std_dev read_orientation_outward) -> structure:
+           parameter "id" of String, parameter "name" of String, parameter
+           "workspace_name" of String, parameter "workspace_type" of String,
+           parameter "sequencing_tech" of String, parameter "single_genome"
+           of String, parameter "insert_size_mean" of String, parameter
+           "insert_size_std_dev" of String, parameter
+           "read_orientation_outward" of String
         """
         # ctx is the context object
         # return variables are: info
@@ -331,7 +332,7 @@ class ReadsAPI:
             info['workspace_name'] = workspace_name
             info['workspace_type'] = returnVal['info'][2]#['type']
 
-            fields = ['returnVal', 'single_genome', 'insert_size_mean', 'insert_size_std_dev',
+            fields = ['single_genome', 'insert_size_mean', 'insert_size_std_dev',
                       'insert_size_std_dev','read_orientation_outward']
             for field in fields:
                 if field in returnVal['data']:
@@ -374,34 +375,34 @@ class ReadsAPI:
            name of workspace string workspace_type - type of object string
            sequencing_tech - technological platform used to generate data in
            this object int single_genome - string strain - string source -
-           int read_count - int read_size - float gc_content - float
-           read_length_mean - float read_length_stdev - float phred_type -
-           int number_of_duplicates - float qual_min - float qual_max - float
-           qual_mean - float qual_stdev - float base_percentages - float
-           duplicate_perc - int interleaved - float insert_size_mean - float
-           insert_size_std_dev - int read_orientation_outward -
-           mapping<string, float> base_percentages - @optional gc_content
-           source strain read_count read_size single_genome @optional
-           read_length_mean read_length_stdev phred_type @optional
-           number_of_duplicates qual_min qual_max @optional qual_mean
-           qual_stdev base_percentages @optional insert_size_mean
-           insert_size_std_dev interleaved @optional
-           read_orientation_outward) -> structure: parameter "id" of String,
-           parameter "name" of String, parameter "workspace_name" of String,
-           parameter "workspace_type" of String, parameter "sequencing_tech"
-           of String, parameter "single_genome" of Long, parameter "strain"
-           of String, parameter "source" of String, parameter "read_count" of
-           Long, parameter "read_size" of Long, parameter "gc_content" of
-           Double, parameter "read_length_mean" of Double, parameter
-           "read_length_stdev" of Double, parameter "phred_type" of Double,
-           parameter "number_of_duplicates" of Long, parameter "qual_min" of
-           Double, parameter "qual_max" of Double, parameter "qual_mean" of
-           Double, parameter "qual_stdev" of Double, parameter
-           "duplicate_perc" of Double, parameter "interleaved" of Long,
-           parameter "insert_size_mean" of Double, parameter
-           "insert_size_std_dev" of Double, parameter
-           "read_orientation_outward" of Long, parameter "base_percentages"
-           of mapping from String to Double
+           string read_count - string read_size - string gc_content - string
+           read_length_mean - string read_length_stdev - string phred_type -
+           string number_of_duplicates - string qual_min - string qual_max -
+           string qual_mean - string qual_stdev - string base_percentages -
+           string duplicate_perc - string interleaved - string
+           insert_size_mean - string insert_size_std_dev - string
+           read_orientation_outward - mapping<string, string>
+           base_percentages - @optional gc_content source strain read_count
+           read_size single_genome @optional read_length_mean
+           read_length_stdev phred_type @optional number_of_duplicates
+           qual_min qual_max @optional qual_mean qual_stdev base_percentages
+           @optional insert_size_mean insert_size_std_dev interleaved
+           @optional read_orientation_outward) -> structure: parameter "id"
+           of String, parameter "name" of String, parameter "workspace_name"
+           of String, parameter "workspace_type" of String, parameter
+           "sequencing_tech" of String, parameter "single_genome" of Long,
+           parameter "strain" of String, parameter "source" of String,
+           parameter "read_count" of String, parameter "read_size" of String,
+           parameter "gc_content" of String, parameter "read_length_mean" of
+           String, parameter "read_length_stdev" of String, parameter
+           "phred_type" of String, parameter "number_of_duplicates" of
+           String, parameter "qual_min" of String, parameter "qual_max" of
+           String, parameter "qual_mean" of String, parameter "qual_stdev" of
+           String, parameter "duplicate_perc" of String, parameter
+           "interleaved" of String, parameter "insert_size_mean" of String,
+           parameter "insert_size_std_dev" of String, parameter
+           "read_orientation_outward" of String, parameter "base_percentages"
+           of mapping from String to String
         """
         # ctx is the context object
         # return variables are: info

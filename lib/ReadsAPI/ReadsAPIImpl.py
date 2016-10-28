@@ -433,7 +433,7 @@ class ReadsAPI:
             info['workspace_name'] = workspace_name
             info['workspace_type'] = returnVal['info'][2]  #['type']
 
-###strain and source currently not specified in example data
+###PLACEHOLDERS strain and source currently not specified in example data
             #if returnVal['data']['strain'] is not None:
             #    info['strain'] = returnVal['data']['strain']
             #else:

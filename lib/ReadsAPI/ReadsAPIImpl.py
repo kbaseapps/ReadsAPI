@@ -341,7 +341,7 @@ class ReadsAPI:
                     info[field] = ""
 
             ###special cases
-            if returnVal['data']['sequencing_tech'] is not None:
+            if 'sequencing_tech' in returnVal['data'] and returnVal['data']['sequencing_tech'] is not None:
                 info['platform'] = returnVal['data']['sequencing_tech']
             else:
                 info['platform'] = ""
@@ -460,13 +460,14 @@ class ReadsAPI:
                     info[field] = ""
 
             ###special cases
-            if returnVal['data']['sequencing_tech'] is not None:
+            if 'sequencing_tech' in returnVal['data'] and returnVal['data']['sequencing_tech'] is not None:
                 info['platform'] = returnVal['data']['sequencing_tech']
             else:
                 info['platform'] = ""
 
-            if returnVal['data']['number_of_duplicates'] is not None and returnVal['data'][
-                'read_count'] is not None:
+            if 'number_of_duplicates' in returnVal['data'] and returnVal['data']['number_of_duplicates'] is not None \
+                    and 'read_count' in returnVal['data'] \
+                    and returnVal['data']['read_count'] is not None:
                 info['duplicate_perc'] = returnVal['data']['number_of_duplicates'] / info['read_count']
             else:
                 info['duplicate_perc'] = ""

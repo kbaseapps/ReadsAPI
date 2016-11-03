@@ -74,21 +74,27 @@ class ReadsAPITest(unittest.TestCase):
     # NOTE: According to Python unittest naming rules test method names should start from 'test'.
 
     def test_get_id_ok(self):
+        ws_obj_names = self.load_test_data_ok()
+
         readssetparams = {}
-        readssetparams['workspace_name'] = 'marcin:1475008857456'
-        readssetparams['name'] = 'test_SRR400615_1000'
+
+        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
         
         result = self.getImpl().get_id(self.getContext(),readssetparams)
         print('RESULT test_get_id_ok:')
         pprint(result)
 
-        self.assertEqual(result, [10])
+        self.assertEqual(result, [2])
 
     
     def test_get_name_ok(self):
+        ws_obj_names = self.load_test_data_ok()
+
         readssetparams = {}
-        readssetparams['workspace_name'] = 'marcin:1475008857456'
-        readssetparams['name'] = 'test_SRR400615_1000'
+
+        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
         
         objid = self.getImpl().get_id(self.getContext(),readssetparams)
         
@@ -98,14 +104,16 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_name_ok:')
         pprint(result)
 
-        self.assertEqual(result,[u'test_SRR400615_1000'])
+        self.assertEqual(result,[u'test_paired_reads_eautils'])
 
 
     def test_get_type_ok(self):
+        ws_obj_names = self.load_test_data_ok()
+
         readssetparams = {}
 
-        readssetparams['workspace_name'] = 'marcin:1475008857456'
-        readssetparams['name'] = 'test_SRR400615_1000'
+        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
 
         objid = self.getImpl().get_id(self.getContext(), readssetparams)
 
@@ -115,7 +123,7 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_type_ok:')
         pprint(result)
 
-        self.assertEqual(result, [u'KBaseFile.SingleEndLibrary-2.0'])
+        self.assertEqual(result, [u'KBaseFile.PairedEndLibrary-2.2'])
 
     def load_test_data_ok(self):
 
@@ -232,16 +240,16 @@ class ReadsAPITest(unittest.TestCase):
         pprint(result)
 
         testresult = [{'id': 2,
-                       'insert_size_mean': None,
-                       'insert_size_std_dev': None,
+                       'insert_size_mean': 'None',
+                       'insert_size_std_dev': 'None',
                        'name': u'test_paired_reads_eautils',
                        'platform': u'seqtech-pr1',
-                       'read_orientation_outward': 0,
-                       'single_genome': 1,
+                       'read_orientation_outward': '0',
+                       'single_genome': '1',
                        'workspace_name': 'testReadsAPI',
-                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.1'}]
+                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
 
-        self.assertEqual(result, testresult)
+        self.assertEqual(sorted(result), sorted(testresult))
 
     def test_get_reads_info_all_ok(self):
 
@@ -260,37 +268,9 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_all_ok:')
         pprint(result)
 
-        testresult = [{'base_percentages': {u'A': 16.0727,
-                                            u'C': 33.9538,
-                                            u'G': 33.9735,
-                                            u'N': 0.0,
-                                            u'T': 16.0},
-                       'duplicate_perc': 0,
-                       'gc_content': 0.679273,
-                       'id': 2,
-                       'insert_size_mean': None,
-                       'insert_size_std_dev': None,
-                       'name': u'test_paired_reads_eautils',
-                       'number_of_duplicates': 792,
-                       'phred_type': u'33',
-                       'platform': u'seqtech-pr1',
-                       'qual_max': 51.0,
-                       'qual_mean': 43.0493,
-                       'qual_min': 10.0,
-                       'qual_stdev': 10.545,
-                       'read_count': 25000,
-                       'read_length_mean': 100.0,
-                       'read_length_stdev': 0.0,
-                       'read_orientation_outward': 0,
-                       'read_size': 2500000,
-                       'sequencing_tech': u'seqtech-pr1',
-                       'single_genome': 1,
-                       'source': '',
-                       'strain': '',
-                       'workspace_name': 'testReadsAPI',
-                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.1'}]
+        testresult = [{'read_count': '25000', 'insert_size_mean': 'None', 'qual_min': '10.0', 'strain': '', 'duplicate_perc': 0, 'number_of_duplicates': '792', 'base_percentages': "{u'A': 16.0727, u'C': 33.9538, u'T': 16.0, u'G': 33.9735, u'N': 0.0}", 'qual_max': '51.0', 'platform': u'seqtech-pr1', 'id': 2, 'source': '', 'single_genome': '1', 'qual_stdev': '10.545', 'read_orientation_outward': '0', 'phred_type': '33', 'read_length_stdev': '0.0', 'read_size': '2500000', 'qual_mean': '43.0493', 'read_length_mean': '100.0', 'insert_size_std_dev': 'None', 'name': u'test_paired_reads_eautils', 'workspace_name': 'testReadsAPI', 'gc_content': '0.679273', 'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
 
-        self.assertEqual(result, testresult)
+        self.assertEqual(sorted(result), sorted(testresult))
 
     def test_get_reads_info_minimal(self):
 
@@ -317,9 +297,9 @@ class ReadsAPITest(unittest.TestCase):
                        'read_orientation_outward': '',
                        'single_genome': '',
                        'workspace_name': 'testReadsAPI',
-                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.1'}]
+                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
 
-        self.assertEqual(result, testresult)
+        self.assertEqual(sorted(result), sorted(testresult))
 
     def test_get_reads_info_all_minimal(self):
 
@@ -338,30 +318,11 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
 
-        testresult = [{'base_percentages': '',
-                       'duplicate_perc': '',
-                       'gc_content': '',
-                       'id': 2,
-                       'insert_size_mean': '',
-                       'insert_size_std_dev': '',
-                       'name': u'test_paired_reads_eautils',
-                       'number_of_duplicates': '',
-                       'phred_type': '',
-                       'platform': u'seqtech-pr1',
-                       'qual_max': '',
-                       'qual_mean': '',
-                       'qual_min': '',
-                       'qual_stdev': '',
-                       'read_count': '',
-                       'read_length_mean': '',
-                       'read_length_stdev': '',
-                       'read_orientation_outward': '',
-                       'read_size': '',
-                       'sequencing_tech': u'seqtech-pr1',
-                       'single_genome': '',
-                       'source': '',
-                       'strain': '',
-                       'workspace_name': 'testReadsAPI',
-                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.1'}]
+        testresult = [{'read_count': '', 'insert_size_mean': '', 'qual_min': '', 'strain': '', 'duplicate_perc': '',
+         'number_of_duplicates': '', 'base_percentages': '', 'qual_max': '', 'platform': u'seqtech-pr1', 'id': 2,
+         'source': '', 'single_genome': '', 'qual_stdev': '', 'read_orientation_outward': '', 'phred_type': '',
+         'read_length_stdev': '', 'read_size': '', 'qual_mean': '', 'read_length_mean': '', 'insert_size_std_dev': '',
+         'name': u'test_paired_reads_eautils', 'workspace_name': 'testReadsAPI', 'gc_content': '',
+         'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
 
-        self.assertEqual(result, testresult)
+        self.assertEqual(sorted(result), sorted(testresult))

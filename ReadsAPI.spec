@@ -10,12 +10,14 @@ module ReadsAPI {
        string id - id of object
        string name - name of object
        string workspace_name - name of workspace
+       string workspace_id - id of workspace
 
     */
     typedef structure {
         string id;
         string name;
         string workspace_name;
+        string workspace_id;
     } ReadsParams;
 
 
@@ -162,4 +164,24 @@ module ReadsAPI {
         Returns all info about this Reads object.
     */
     funcdef get_reads_info_all(ReadsParams params) returns(ReadsInfoAll info) authentication required;
+
+
+    /* Object reference parameter
+
+    */
+    typedef structure {
+       string workspace_obj_ref;
+    } ObjRefParams;
+
+
+    /*
+        Returns info about this Reads object.
+    */
+	funcdef get_reads_info_by_ref(ObjRefParams params) returns(ReadsInfo info) authentication required;
+
+
+    /*
+        Returns all info about this Reads object.
+    */
+    funcdef get_reads_info_all_by_ref(ObjRefParams params) returns(ReadsInfoAll info) authentication required;
 };

@@ -78,8 +78,8 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['name'] = ws_obj_names[3]  #'ERR000916'
         
         result = self.getImpl().get_id(self.getContext(),readssetparams)
         print('RESULT test_get_id_ok:')
@@ -93,12 +93,11 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['id'] = ws_obj_names[1]  #'ERR000916'
         
-        objid = self.getImpl().get_id(self.getContext(),readssetparams)
-        
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(),readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_name(self.getContext(),readssetparams)
         print('RESULT test_get_name_ok:')
@@ -112,12 +111,11 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['id'] = ws_obj_names[1]  #'ERR000916'
 
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(), readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_type(self.getContext(), readssetparams)
         print('RESULT test_get_type_ok:')
@@ -168,7 +166,7 @@ class ReadsAPITest(unittest.TestCase):
                                                              "provenance": summary_provenance}]})
         print "SAVED NEW OBJECT"
 
-        ret = [test_ws_name, test_obj_name]
+        ret = [summary_save_info[0][6], summary_save_info[0][0],summary_save_info[0][7], summary_save_info[0][1]]
         print ret
 
         return ret
@@ -215,9 +213,10 @@ class ReadsAPITest(unittest.TestCase):
                                                                 "name": test_obj_name,
                                                                 "hidden": 0,
                                                                 "provenance": summary_provenance}]})
-        print "SAVED NEW OBJECT"
+        print "SAVED NEW MINIMAL OBJECT"
+        print "summary_save_info " + str(summary_save_info)
 
-        ret = [test_ws_name, test_obj_name]
+        ret = [summary_save_info[0][6], summary_save_info[0][0], summary_save_info[0][7], summary_save_info[0][1]]
         print ret
 
         return ret
@@ -228,12 +227,11 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]#'marcin:1475008857456'
-        readssetparams['name'] = ws_obj_names[1]#'ERR000916'
+        readssetparams['workspace_id'] = ws_obj_names[0]#'marcin:1475008857456'
+        readssetparams['id'] = ws_obj_names[1]#'ERR000916'
 
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(), readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_reads_info(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_ok:')
@@ -257,12 +255,11 @@ class ReadsAPITest(unittest.TestCase):
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] =  ws_obj_names[0]#'kbasetest:1477429140721'
-        readssetparams['name'] = ws_obj_names[1]#'test_paired_reads_eautils'
+        readssetparams['workspace_id'] =  ws_obj_names[0]#'kbasetest:1477429140721'
+        readssetparams['id'] = ws_obj_names[1]#'test_paired_reads_eautils'
 
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(), readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_all_ok:')
@@ -272,18 +269,17 @@ class ReadsAPITest(unittest.TestCase):
 
         self.assertEqual(sorted(result), sorted(testresult))
 
-    def test_get_reads_info_minimal(self):
+    def test_get_reads_info_minimal_ok(self):
 
         ws_obj_names = self.load_test_data_empty()
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['name'] = ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['id'] = ws_obj_names[1]  #'ERR000916'
 
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(), readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_reads_info(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_minimal:')
@@ -301,20 +297,66 @@ class ReadsAPITest(unittest.TestCase):
 
         self.assertEqual(sorted(result), sorted(testresult))
 
-    def test_get_reads_info_all_minimal(self):
+    def test_get_reads_info_all_minimal_ok(self):
 
         ws_obj_names = self.load_test_data_empty()
 
         readssetparams = {}
 
-        readssetparams['workspace_name'] = ws_obj_names[0]  #'kbasetest:1477429140721'
-        readssetparams['name'] = ws_obj_names[1]  #'test_paired_reads_eautils'
+        readssetparams['workspace_id'] = ws_obj_names[0]  #'kbasetest:1477429140721'
+        readssetparams['id'] = ws_obj_names[1]  #'test_paired_reads_eautils'
 
-        objid = self.getImpl().get_id(self.getContext(), readssetparams)
-
-        readssetparams['id'] = objid[0]
+        #objid = self.getImpl().get_id(self.getContext(), readssetparams)
+        #readssetparams['id'] = objid[0]
 
         result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
+        print('RESULT test_get_reads_info_all_minimal:')
+        pprint(result)
+
+        testresult = [{'read_count': '', 'insert_size_mean': '', 'qual_min': '', 'strain': '', 'duplicate_perc': '',
+         'number_of_duplicates': '', 'base_percentages': '', 'qual_max': '', 'platform': u'seqtech-pr1', 'id': 2,
+         'source': '', 'single_genome': '', 'qual_stdev': '', 'read_orientation_outward': '', 'phred_type': '',
+         'read_length_stdev': '', 'read_size': '', 'qual_mean': '', 'read_length_mean': '', 'insert_size_std_dev': '',
+         'name': u'test_paired_reads_eautils', 'workspace_name': 'testReadsAPI', 'gc_content': '',
+         'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
+
+        self.assertEqual(sorted(result), sorted(testresult))
+
+
+    def test_get_reads_info_minimal_by_ref_ok(self):
+
+        ws_obj_names = self.load_test_data_empty()
+
+        objref = str(ws_obj_names[0]) + "/" + str(ws_obj_names[1])
+
+        params = {}
+        params['workspace_obj_ref'] = objref
+        result = self.getImpl().get_reads_info_by_ref(self.getContext(), params)
+        print('RESULT test_get_reads_info_minimal:')
+        pprint(result)
+
+        testresult = [{'id': 2,
+                       'insert_size_mean': '',
+                       'insert_size_std_dev': '',
+                       'name': u'test_paired_reads_eautils',
+                       'platform': u'seqtech-pr1',
+                       'read_orientation_outward': '',
+                       'single_genome': '',
+                       'workspace_name': 'testReadsAPI',
+                       'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
+
+        self.assertEqual(sorted(result), sorted(testresult))
+
+    def test_get_reads_info_all_minimal_by_ref_ok(self):
+
+        ws_obj_names = self.load_test_data_empty()
+
+        objref = str(ws_obj_names[0])+"/"+str(ws_obj_names[1])
+
+        params = {}
+        params['workspace_obj_ref'] = objref
+
+        result = self.getImpl().get_reads_info_all_by_ref(self.getContext(), params)
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
 

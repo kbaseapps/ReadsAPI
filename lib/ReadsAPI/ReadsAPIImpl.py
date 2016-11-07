@@ -566,7 +566,7 @@ class ReadsAPI:
                 info['duplicate_perc'] = int(returnVal['data']['number_of_duplicates']) / int(info['read_count'])
             else:
                 info['duplicate_perc'] = ""
-                
+
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)

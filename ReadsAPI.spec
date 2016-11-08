@@ -21,6 +21,14 @@ module ReadsAPI {
     } ReadsParams;
 
 
+    /* Object reference parameter
+
+    */
+    typedef structure {
+       string workspace_obj_ref;
+    } ObjRefParams;
+
+
     /*
         Returns the object id for a Reads object
     */
@@ -29,7 +37,7 @@ module ReadsAPI {
     /*
         Returns the object id for a Reads object
     */
-    funcdef get_id_by_ref(string workspace_object_ref) returns (int) authentication required;
+    funcdef get_id_by_ref(ObjRefParams params) returns (int) authentication required;
 
     /*
         Returns the object name for a Reads object
@@ -39,7 +47,7 @@ module ReadsAPI {
     /*
         Returns the object name for a Reads object
     */
-    funcdef get_name_by_ref(string workspace_object_ref) returns (string) authentication required;
+    funcdef get_name_by_ref(ObjRefParams params) returns (string) authentication required;
 
     /*
         Returns the object type for a Reads object
@@ -49,41 +57,7 @@ module ReadsAPI {
     /*
         Returns the object type for a Reads object
     */
-    funcdef get_type_by_ref(string workspace_object_ref) returns (string) authentication required;
-
-
-    /* Reads info
-
-       string id - id of object
-       string name - name of object
-       string workspace_name - name of workspace
-       string workspace_type - type of object
-       string sequencing_tech - technological platform used to generate data in this object
-       string single_genome -
-       string insert_size_mean -
-       string insert_size_std_dev -
-       string read_orientation_outward -
-
-       @optional sequencing_tech single_genome insert_size_mean insert_size_std_dev read_orientation_outward
-
-    */
-    typedef structure {
-        string id;
-        string name;
-        string workspace_name;
-        string workspace_type;
-        string sequencing_tech;
-        string single_genome;
-        string insert_size_mean;
-        string insert_size_std_dev;
-        string read_orientation_outward;
-    } ReadsInfo;
-
-
-    /*
-        Returns info about this Reads object.
-    */
-	funcdef get_reads_info(ReadsParams params) returns(ReadsInfo info) authentication required;
+    funcdef get_type_by_ref(ObjRefParams params) returns (string) authentication required;
 
 
     /* Reads info all
@@ -164,21 +138,6 @@ module ReadsAPI {
         Returns all info about this Reads object.
     */
     funcdef get_reads_info_all(ReadsParams params) returns(ReadsInfoAll info) authentication required;
-
-
-    /* Object reference parameter
-
-    */
-    typedef structure {
-       string workspace_obj_ref;
-    } ObjRefParams;
-
-
-    /*
-        Returns info about this Reads object.
-    */
-	funcdef get_reads_info_by_ref(ObjRefParams params) returns(ReadsInfo info) authentication required;
-
 
     /*
         Returns all info about this Reads object.

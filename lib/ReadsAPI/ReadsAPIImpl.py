@@ -28,7 +28,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "d90bba342742fdb45752b92d371e1679e43c618b"
+    GIT_COMMIT_HASH = "5cc2184194e7c0e9f3d0baea2e6c0a38234c714e"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -44,14 +44,16 @@ class ReadsAPI:
         #END_CONSTRUCTOR
         pass
     
+
     def get_id(self, ctx, params):
         """
         Returns the object id for a Reads object
         :param params: instance of type "ReadsParams" (ReadsAPI parameters
            string id - id of object string name - name of object string
-           workspace_name - name of workspace) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String
+           workspace_name - name of workspace string workspace_id - id of
+           workspace) -> structure: parameter "id" of String, parameter
+           "name" of String, parameter "workspace_name" of String, parameter
+           "workspace_id" of String
         :returns: instance of Long
         """
         # ctx is the context object
@@ -87,10 +89,11 @@ class ReadsAPI:
         # return the results
         return [returnVal]
 
-    def get_id_by_ref(self, ctx, workspace_object_ref):
+    def get_id_by_ref(self, ctx, params):
         """
         Returns the object id for a Reads object
-        :param workspace_object_ref: instance of String
+        :param params: instance of type "ObjRefParams" (Object reference
+           parameter) -> structure: parameter "workspace_obj_ref" of String
         :returns: instance of Long
         """
         # ctx is the context object
@@ -101,7 +104,7 @@ class ReadsAPI:
         wsClient = workspaceService(self.workspaceURL, token=token)
         try:
             # Note that results from the workspace are returned in a list
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_object_ref}],
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": params['workspace_obj_ref']}],
                                                       "includeMetadata": 0,
                                                       "ignoreErrors": 0})[0][0]
         except:
@@ -124,9 +127,10 @@ class ReadsAPI:
         Returns the object name for a Reads object
         :param params: instance of type "ReadsParams" (ReadsAPI parameters
            string id - id of object string name - name of object string
-           workspace_name - name of workspace) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String
+           workspace_name - name of workspace string workspace_id - id of
+           workspace) -> structure: parameter "id" of String, parameter
+           "name" of String, parameter "workspace_name" of String, parameter
+           "workspace_id" of String
         :returns: instance of String
         """
         # ctx is the context object
@@ -162,10 +166,11 @@ class ReadsAPI:
         # return the results
         return [returnVal]
 
-    def get_name_by_ref(self, ctx, workspace_object_ref):
+    def get_name_by_ref(self, ctx, params):
         """
         Returns the object name for a Reads object
-        :param workspace_object_ref: instance of String
+        :param params: instance of type "ObjRefParams" (Object reference
+           parameter) -> structure: parameter "workspace_obj_ref" of String
         :returns: instance of String
         """
         # ctx is the context object
@@ -176,7 +181,7 @@ class ReadsAPI:
         wsClient = workspaceService(self.workspaceURL, token=token)
         try:
             #Note that results from the workspace are returned in a list
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_object_ref}],
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": params['workspace_obj_ref']}],
                                                       "includeMetadata": 0,
                                                       "ignoreErrors": 0})[0][1]
         except:
@@ -199,9 +204,10 @@ class ReadsAPI:
         Returns the object type for a Reads object
         :param params: instance of type "ReadsParams" (ReadsAPI parameters
            string id - id of object string name - name of object string
-           workspace_name - name of workspace) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String
+           workspace_name - name of workspace string workspace_id - id of
+           workspace) -> structure: parameter "id" of String, parameter
+           "name" of String, parameter "workspace_name" of String, parameter
+           "workspace_id" of String
         :returns: instance of String
         """
         # ctx is the context object
@@ -234,10 +240,11 @@ class ReadsAPI:
         # return the results
         return [returnVal]
 
-    def get_type_by_ref(self, ctx, workspace_object_ref):
+    def get_type_by_ref(self, ctx, params):
         """
         Returns the object type for a Reads object
-        :param workspace_object_ref: instance of String
+        :param params: instance of type "ObjRefParams" (Object reference
+           parameter) -> structure: parameter "workspace_obj_ref" of String
         :returns: instance of String
         """
         # ctx is the context object
@@ -248,7 +255,7 @@ class ReadsAPI:
         wsClient = workspaceService(self.workspaceURL, token=token)
         try:
             # Note that results from the workspace are returned in a list
-            returnVal = wsClient.get_object_info_new({"objects": [{"ref": workspace_object_ref}]})[0][2]
+            returnVal = wsClient.get_object_info_new({"objects": [{"ref": params['workspace_obj_ref']}]})[0][2]
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
@@ -264,71 +271,15 @@ class ReadsAPI:
         # return the results
         return [returnVal]
 
-    def get_reads_info(self, ctx, params):
-        """
-        Returns info about this Reads object.
-        :param params: instance of type "ReadsParams" (ReadsAPI parameters
-           string id - id of object string name - name of object string
-           workspace_name - name of workspace) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String
-        :returns: instance of type "ReadsInfo" (Reads info string id - id of
-           object string name - name of object string workspace_name - name
-           of workspace string workspace_type - type of object string
-           sequencing_tech - technological platform used to generate data in
-           this object string single_genome - string insert_size_mean -
-           string insert_size_std_dev - string read_orientation_outward -
-           @optional sequencing_tech single_genome insert_size_mean
-           insert_size_std_dev read_orientation_outward) -> structure:
-           parameter "id" of String, parameter "name" of String, parameter
-           "workspace_name" of String, parameter "workspace_type" of String,
-           parameter "sequencing_tech" of String, parameter "single_genome"
-           of String, parameter "insert_size_mean" of String, parameter
-           "insert_size_std_dev" of String, parameter
-           "read_orientation_outward" of String
-        """
-        # ctx is the context object
-        # return variables are: info
-        #BEGIN get_reads_info
-
-        if 'workspace_id' not in params:
-            raise ValueError('Parameter workspace_id is not set in input arguments')
-        workspace_id = params['workspace_id']
-        if 'id' not in params:
-            raise ValueError('Parameter id is not set in input arguments')
-        objid = params['id']
-
-        try:
-
-            objref = str(workspace_id) + '/' + str(objid)
-            params = {}
-            params['workspace_obj_ref'] = objref
-
-            info = self.get_reads_info_by_ref(ctx, params)[0]
-
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error from workspace:\n' + orig_error)
-
-        #END get_reads_info
-
-        # At some point might do deeper type checking...
-        if not isinstance(info, dict):
-            raise ValueError('Method get_reads_info return value ' +
-                             'info is not type dict as required.')
-        # return the results
-        return [info]
-
     def get_reads_info_all(self, ctx, params):
         """
         Returns all info about this Reads object.
         :param params: instance of type "ReadsParams" (ReadsAPI parameters
            string id - id of object string name - name of object string
-           workspace_name - name of workspace) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String
+           workspace_name - name of workspace string workspace_id - id of
+           workspace) -> structure: parameter "id" of String, parameter
+           "name" of String, parameter "workspace_name" of String, parameter
+           "workspace_id" of String
         :returns: instance of type "ReadsInfoAll" (Reads info all string id -
            id of object string name - name of object string workspace_name -
            name of workspace string workspace_type - type of object string
@@ -398,76 +349,6 @@ class ReadsAPI:
         # return the results
         return [info]
 
-    def get_reads_info_by_ref(self, ctx, params):
-        """
-        Returns info about this Reads object.
-        :param params: instance of type "ObjRefParams" (Object reference
-           parameter) -> structure: parameter "workspace_obj_ref" of String
-        :returns: instance of type "ReadsInfo" (Reads info string id - id of
-           object string name - name of object string workspace_name - name
-           of workspace string workspace_type - type of object string
-           sequencing_tech - technological platform used to generate data in
-           this object string single_genome - string insert_size_mean -
-           string insert_size_std_dev - string read_orientation_outward -
-           @optional sequencing_tech single_genome insert_size_mean
-           insert_size_std_dev read_orientation_outward) -> structure:
-           parameter "id" of String, parameter "name" of String, parameter
-           "workspace_name" of String, parameter "workspace_type" of String,
-           parameter "sequencing_tech" of String, parameter "single_genome"
-           of String, parameter "insert_size_mean" of String, parameter
-           "insert_size_std_dev" of String, parameter
-           "read_orientation_outward" of String
-        """
-        # ctx is the context object
-        # return variables are: info
-        #BEGIN get_reads_info_by_ref
-
-        token = ctx['token']
-
-        info = dict()
-        wsClient = workspaceService(self.workspaceURL, token=token)
-        try:
-
-            # Note that results from the workspace are returned in a list
-            returnVal = wsClient.get_objects2({'objects': [{'ref': params['workspace_obj_ref']}]})['data'][0]
-
-            #print returnVal
-
-            ###required
-            info['id'] = returnVal['info'][0]
-            info['name'] = returnVal['info'][1]
-            info['workspace_name'] = returnVal['info'][7]
-            info['workspace_type'] = returnVal['info'][2]
-
-            fields = ['single_genome', 'insert_size_mean', 'insert_size_std_dev',
-                      'insert_size_std_dev', 'read_orientation_outward']
-            for field in fields:
-                if field in returnVal['data']:
-                    info[field] = str(returnVal['data'][field])
-                else:
-                    info[field] = ""
-
-            ###special cases
-            if 'sequencing_tech' in returnVal['data'] and returnVal['data']['sequencing_tech'] is not None:
-                info['platform'] = returnVal['data']['sequencing_tech']
-            else:
-                info['platform'] = ""
-
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error from workspace:\n' + orig_error)
-
-        #END get_reads_info_by_ref
-
-        # At some point might do deeper type checking...
-        if not isinstance(info, dict):
-            raise ValueError('Method get_reads_info_by_ref return value ' +
-                             'info is not type dict as required.')
-        # return the results
-        return [info]
-
     def get_reads_info_all_by_ref(self, ctx, params):
         """
         Returns all info about this Reads object.
@@ -522,7 +403,13 @@ class ReadsAPI:
             print "params['workspace_obj_ref']" + params['workspace_obj_ref']
 
             # Note that results from the workspace are returned in a list
-            returnVal = wsClient.get_objects2({'objects': [{'ref': params['workspace_obj_ref']}]})['data'][0]
+            try:
+                returnVal = wsClient.get_objects2({'objects': [{'ref': params['workspace_obj_ref']}]})['data'][0]
+            except:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+                orig_error = ''.join('    ' + line for line in lines)
+                raise ValueError('Error from workspace:\n' + orig_error)
 
             info['id'] = returnVal['info'][0]
             info['name'] = returnVal['info'][1]
@@ -571,7 +458,7 @@ class ReadsAPI:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error from workspace:\n' + orig_error)
+            raise ValueError('Error:\n' + orig_error)
 
         #END get_reads_info_all_by_ref
 

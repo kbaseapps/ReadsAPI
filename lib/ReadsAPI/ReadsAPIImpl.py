@@ -432,7 +432,7 @@ class ReadsAPI:
             fields = ['single_genome', 'read_count', 'read_size',
                       'gc_content', 'read_length_mean', 'read_length_stdev', 'phred_type',
                       'number_of_duplicates', 'qual_min', 'qual_max', 'qual_mean',
-                      'qual_stdev', 'base_percentages',
+                      'qual_stdev', 'base_percentages', 'total_bases',
                       'insert_size_mean', 'insert_size_std_dev', 'insert_size_std_dev', 'read_orientation_outward']
 
             for field in fields:

@@ -11,6 +11,7 @@ module ReadsAPI {
        string name - name of object
        string workspace_name - name of workspace
        string workspace_id - id of workspace
+       string string workspace_obj_ref - workspace object ref
 
     */
     typedef structure {
@@ -18,46 +19,9 @@ module ReadsAPI {
         string name;
         string workspace_name;
         string workspace_id;
+
+        string workspace_obj_ref;
     } ReadsParams;
-
-
-    /* Object reference parameter
-
-    */
-    typedef structure {
-       string workspace_obj_ref;
-    } ObjRefParams;
-
-
-    /*
-        Returns the object id for a Reads object
-    */
-    funcdef get_id(ReadsParams params) returns (int) authentication required;
-
-    /*
-        Returns the object id for a Reads object
-    */
-    funcdef get_id_by_ref(ObjRefParams params) returns (int) authentication required;
-
-    /*
-        Returns the object name for a Reads object
-    */
-    funcdef get_name(ReadsParams params) returns (string) authentication required;
-
-    /*
-        Returns the object name for a Reads object
-    */
-    funcdef get_name_by_ref(ObjRefParams params) returns (string) authentication required;
-
-    /*
-        Returns the object type for a Reads object
-    */
-    funcdef get_type(ReadsParams params) returns (string) authentication required;
-
-    /*
-        Returns the object type for a Reads object
-    */
-    funcdef get_type_by_ref(ObjRefParams params) returns (string) authentication required;
 
 
     /* Reads info all
@@ -142,5 +106,5 @@ module ReadsAPI {
     /*
         Returns all info about this Reads object.
     */
-    funcdef get_reads_info_all_by_ref(ObjRefParams params) returns(ReadsInfoAll info) authentication required;
+    funcdef get_reads_info_all_by_ref(ReadsParams params) returns(ReadsInfoAll info) authentication required;
 };

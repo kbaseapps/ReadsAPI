@@ -289,7 +289,7 @@ class ReadsAPITest(unittest.TestCase):
         params = {}
         params['workspace_obj_ref'] = objref
         
-        result = self.getImpl().get_reads_info_all_by_ref(self.getContext(), params)
+        result = self.getImpl().get_reads_info_all(self.getContext(), params)
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         

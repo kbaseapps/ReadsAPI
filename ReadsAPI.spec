@@ -103,8 +103,4 @@ module ReadsAPI {
     */
     funcdef get_reads_info_all(ReadsParams params) returns(ReadsInfoAll info) authentication required;
 
-    /*
-        Returns all info about this Reads object.
-    */
-    funcdef get_reads_info_all_by_ref(ReadsParams params) returns(ReadsInfoAll info) authentication required;
 };

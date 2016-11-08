@@ -28,7 +28,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "ac00a842da296bc37dafdf613a7ee063ce15eb58"
+    GIT_COMMIT_HASH = "c8a61861ceaf83418794eba031b4cd81c9dc3872"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -322,143 +322,66 @@ class ReadsAPI:
         # return variables are: info
         #BEGIN get_reads_info_all
 
-        if 'workspace_id' not in params:
-            raise ValueError('Parameter workspace_id is not set in input arguments')
-        workspace_id = params['workspace_id']
-        if 'id' not in params:
-            raise ValueError('Parameter id is not set in input arguments')
-        objid = params['id']
-
-        try:
-
-            objref = str(workspace_id) + '/' + str(objid)
-
-            params = {}
-            params['workspace_obj_ref'] = objref
-
-            info = self.get_reads_info_all_by_ref(ctx, params)[0]
-
-        except:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-            orig_error = ''.join('    ' + line for line in lines)
-            raise ValueError('Error from workspace:\n' + orig_error)
-
-        #END get_reads_info_all
-
-        # At some point might do deeper type checking...
-        if not isinstance(info, dict):
-            raise ValueError('Method get_reads_info_all return value ' +
-                             'info is not type dict as required.')
-        # return the results
-        return [info]
-
-    def get_reads_info_all_by_ref(self, ctx, params):
-        """
-        Returns all info about this Reads object.
-        :param params: instance of type "ReadsParams" (ReadsAPI parameters
-           string id - id of object string name - name of object string
-           workspace_name - name of workspace string workspace_id - id of
-           workspace string string workspace_obj_ref - workspace object ref)
-           -> structure: parameter "id" of String, parameter "name" of
-           String, parameter "workspace_name" of String, parameter
-           "workspace_id" of String, parameter "workspace_obj_ref" of String
-        :returns: instance of type "ReadsInfoAll" (Reads info all string id -
-           id of object string name - name of object string workspace_name -
-           name of workspace string workspace_type - type of object string
-           sequencing_tech - technological platform used to generate data in
-           this object int single_genome - string strain - string source -
-           string read_count - string read_size - string gc_content - string
-           read_length_mean - string read_length_stdev - string phred_type -
-           string number_of_duplicates - string qual_min - string qual_max -
-           string qual_mean - string qual_stdev - string base_percentages -
-           string duplicate_perc - string interleaved - string
-           insert_size_mean - string insert_size_std_dev - string
-           read_orientation_outward - mapping<string, string>
-           base_percentages - @optional gc_content source strain read_count
-           read_size single_genome @optional read_length_mean
-           read_length_stdev phred_type @optional number_of_duplicates
-           qual_min qual_max @optional qual_mean qual_stdev base_percentages
-           @optional insert_size_mean insert_size_std_dev interleaved
-           @optional read_orientation_outward) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String, parameter "workspace_type" of String, parameter
-           "sequencing_tech" of String, parameter "single_genome" of Long,
-           parameter "strain" of String, parameter "source" of String,
-           parameter "read_count" of String, parameter "read_size" of String,
-           parameter "gc_content" of String, parameter "read_length_mean" of
-           String, parameter "read_length_stdev" of String, parameter
-           "phred_type" of String, parameter "number_of_duplicates" of
-           String, parameter "qual_min" of String, parameter "qual_max" of
-           String, parameter "qual_mean" of String, parameter "qual_stdev" of
-           String, parameter "duplicate_perc" of String, parameter
-           "interleaved" of String, parameter "insert_size_mean" of String,
-           parameter "insert_size_std_dev" of String, parameter
-           "read_orientation_outward" of String, parameter "base_percentages"
-           of mapping from String to String
-        """
-        # ctx is the context object
-        # return variables are: info
-        #BEGIN get_reads_info_all_by_ref
-
         if 'workspace_obj_ref' not in params:
-            raise ValueError('Parameter workspace_obj_ref is not set in input arguments')
-        
+            if 'workspace_id' not in params and 'id' not in params:
+                raise ValueError(
+                    'Parameter workspace_obj_ref and separate other option of ws + object ids not set in input arguments')
+            else:
+                workspace_obj_ref = str(params['workspace_id']) + "/" + str(params['id'])
+        else:
+            workspace_obj_ref = params['workspace_obj_ref']
+
         token = ctx['token']
 
         info = dict()
         wsClient = workspaceService(self.workspaceURL, token=token)
         try:
-
-            print "type params "+str(type(params))
-            print "type params " + str(params)
-            print "params['workspace_obj_ref']" + params['workspace_obj_ref']
-
+    
             # Note that results from the workspace are returned in a list
             try:
-                returnVal = wsClient.get_objects2({'objects': [{'ref': params['workspace_obj_ref']}]})['data'][0]
+                returnVal = wsClient.get_objects2({'objects': [{'ref': workspace_obj_ref}]})['data'][0]
             except:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
                 orig_error = ''.join('    ' + line for line in lines)
                 raise ValueError('Error from workspace:\n' + orig_error)
-
+    
             info['id'] = returnVal['info'][0]
             info['name'] = returnVal['info'][1]
             info['workspace_name'] = returnVal['info'][7]
             info['workspace_type'] = returnVal['info'][2]
-
+    
             ###PLACEHOLDERS strain and source currently not specified in example data
             #if returnVal['data']['strain'] is not None:
             #    info['strain'] = returnVal['data']['strain']
             #else:
             #    info['strain'] = ""
             info['strain'] = ""
-
+    
             #if returnVal['data']['source'] is not None:
             #    info['source'] = returnVal['data']['source']
             #else:
             #    info['source'] = ""
             info['source'] = ""
-
+    
             fields = ['single_genome', 'read_count', 'read_size',
                       'gc_content', 'read_length_mean', 'read_length_stdev', 'phred_type',
                       'number_of_duplicates', 'qual_min', 'qual_max', 'qual_mean',
                       'qual_stdev', 'base_percentages', 'total_bases',
                       'insert_size_mean', 'insert_size_std_dev', 'insert_size_std_dev', 'read_orientation_outward']
-
+    
             for field in fields:
                 if field in returnVal['data']:
                     info[field] = str(returnVal['data'][field])
                 else:
                     info[field] = ""
-
+    
             ###special cases
             if 'sequencing_tech' in returnVal['data'] and returnVal['data']['sequencing_tech'] is not None:
                 info['platform'] = returnVal['data']['sequencing_tech']
             else:
                 info['platform'] = ""
-
+    
             if 'number_of_duplicates' in returnVal['data'] and returnVal['data']['number_of_duplicates'] is not None \
                     and 'read_count' in returnVal['data'] \
                     and returnVal['data']['read_count'] is not None:
@@ -471,12 +394,12 @@ class ReadsAPI:
             lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error:\n' + orig_error)
-
-        #END get_reads_info_all_by_ref
+        
+        #END get_reads_info_all
 
         # At some point might do deeper type checking...
         if not isinstance(info, dict):
-            raise ValueError('Method get_reads_info_all_by_ref return value ' +
+            raise ValueError('Method get_reads_info_all return value ' +
                              'info is not type dict as required.')
         # return the results
         return [info]

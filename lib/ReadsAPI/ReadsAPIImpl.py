@@ -28,7 +28,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "c8a61861ceaf83418794eba031b4cd81c9dc3872"
+    GIT_COMMIT_HASH = "10c645b8f48e5c4b8c2d954d335d30afe7d3693a"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -274,7 +274,7 @@ class ReadsAPI:
         pass
     
 
-    def get_reads_info_all(self, ctx, params):
+    def get_reads_info_all_formatted(self, ctx, params):
         """
         Returns all info about this Reads object.
         :param params: instance of type "ReadsParams" (ReadsAPI parameters
@@ -284,43 +284,40 @@ class ReadsAPI:
            -> structure: parameter "id" of String, parameter "name" of
            String, parameter "workspace_name" of String, parameter
            "workspace_id" of String, parameter "workspace_obj_ref" of String
-        :returns: instance of type "ReadsInfoAll" (Reads info all string id -
-           id of object string name - name of object string workspace_name -
-           name of workspace string workspace_type - type of object string
-           sequencing_tech - technological platform used to generate data in
-           this object int single_genome - string strain - string source -
-           string read_count - string read_size - string gc_content - string
-           read_length_mean - string read_length_stdev - string phred_type -
-           string number_of_duplicates - string qual_min - string qual_max -
-           string qual_mean - string qual_stdev - string base_percentages -
-           string duplicate_perc - string interleaved - string
-           insert_size_mean - string insert_size_std_dev - string
-           read_orientation_outward - mapping<string, string>
-           base_percentages - @optional gc_content source strain read_count
-           read_size single_genome @optional read_length_mean
-           read_length_stdev phred_type @optional number_of_duplicates
-           qual_min qual_max @optional qual_mean qual_stdev base_percentages
-           @optional insert_size_mean insert_size_std_dev interleaved
-           @optional read_orientation_outward) -> structure: parameter "id"
-           of String, parameter "name" of String, parameter "workspace_name"
-           of String, parameter "workspace_type" of String, parameter
-           "sequencing_tech" of String, parameter "single_genome" of Long,
-           parameter "strain" of String, parameter "source" of String,
-           parameter "read_count" of String, parameter "read_size" of String,
-           parameter "gc_content" of String, parameter "read_length_mean" of
-           String, parameter "read_length_stdev" of String, parameter
-           "phred_type" of String, parameter "number_of_duplicates" of
-           String, parameter "qual_min" of String, parameter "qual_max" of
-           String, parameter "qual_mean" of String, parameter "qual_stdev" of
-           String, parameter "duplicate_perc" of String, parameter
-           "interleaved" of String, parameter "insert_size_mean" of String,
-           parameter "insert_size_std_dev" of String, parameter
-           "read_orientation_outward" of String, parameter "base_percentages"
-           of mapping from String to String
+        :returns: instance of type "ReadsInfoAll" (Reads info all string id
+           string Name; string workspace_name string Type string Platform
+           string Single_Genome string Strain string Source string
+           Number_of_Reads string Total_Number_of_Bases string GC_Percentage
+           string Mean_Read_Length string Read_Length_Std_Dev string
+           Phred_Type string Number_of_Duplicate_Reads - number of duplicate
+           and (%) string Quality_Score_Min_Max - quality min and max X/ Y
+           string Quality_Score_Mean_Std_Dev - mean (st dev) string
+           Insert_Size_Mean string Insert_Size_Std_Dev string
+           Outward_Read_Orientation string Base_Percentages - A (%), C(%), G
+           (%), T (%), N (%) @optional Single_Genome Strain Source
+           Number_of_Reads Total_Number_of_Bases GC_Percentage @optional
+           Mean_Read_Length Read_Length_Std_Dev Phred_Type
+           Number_of_Duplicate_Reads @optional Quality_Score_Min_Max
+           Quality_Score_Mean_Std_Dev @optional Insert_Size_Mean
+           Insert_Size_Std_Dev Outward_Read_Orientation Base_Percentages) ->
+           structure: parameter "id" of String, parameter "Name" of String,
+           parameter "workspace_name" of String, parameter "Type" of String,
+           parameter "Platform" of String, parameter "Single_Genome" of
+           String, parameter "Strain" of String, parameter "Source" of
+           String, parameter "Number_of_Reads" of String, parameter
+           "Total_Number_of_Bases" of String, parameter "GC_Percentage" of
+           String, parameter "Mean_Read_Length" of String, parameter
+           "Read_Length_Std_Dev" of String, parameter "Phred_Type" of String,
+           parameter "Number_of_Duplicate_Reads" of String, parameter
+           "Quality_Score_Min_Max" of String, parameter
+           "Quality_Score_Mean_Std_Dev" of String, parameter
+           "Insert_Size_Mean" of String, parameter "Insert_Size_Std_Dev" of
+           String, parameter "Outward_Read_Orientation" of String, parameter
+           "Base_Percentages" of String
         """
         # ctx is the context object
         # return variables are: info
-        #BEGIN get_reads_info_all
+        #BEGIN get_reads_info_all_formatted
 
         if 'workspace_obj_ref' not in params:
             if 'workspace_id' not in params and 'id' not in params:
@@ -347,47 +344,120 @@ class ReadsAPI:
                 raise ValueError('Error from workspace:\n' + orig_error)
     
             info['id'] = returnVal['info'][0]
-            info['name'] = returnVal['info'][1]
+    
             info['workspace_name'] = returnVal['info'][7]
-            info['workspace_type'] = returnVal['info'][2]
     
             ###PLACEHOLDERS strain and source currently not specified in example data
             #if returnVal['data']['strain'] is not None:
             #    info['strain'] = returnVal['data']['strain']
             #else:
             #    info['strain'] = ""
-            info['strain'] = ""
+            info['Strain'] = "Not Specified"
     
             #if returnVal['data']['source'] is not None:
             #    info['source'] = returnVal['data']['source']
             #else:
             #    info['source'] = ""
-            info['source'] = ""
+            info['Source'] = "Not Specified"
     
-            fields = ['single_genome', 'read_count', 'read_size',
-                      'gc_content', 'read_length_mean', 'read_length_stdev', 'phred_type',
-                      'number_of_duplicates', 'qual_min', 'qual_max', 'qual_mean',
-                      'qual_stdev', 'base_percentages', 'total_bases',
-                      'insert_size_mean', 'insert_size_std_dev', 'insert_size_std_dev', 'read_orientation_outward']
+            ###Overview tab
+            info['Name'] = returnVal['info'][1]
     
-            for field in fields:
-                if field in returnVal['data']:
-                    info[field] = str(returnVal['data'][field])
-                else:
-                    info[field] = ""
-    
-            ###special cases
-            if 'sequencing_tech' in returnVal['data'] and returnVal['data']['sequencing_tech'] is not None:
-                info['platform'] = returnVal['data']['sequencing_tech']
+            if 'read_count' in returnVal['data']:
+                info['Number_of_Reads'] = str("{:,}".format(returnVal['data']['read_count']))
             else:
-                info['platform'] = ""
+                info['Number_of_Reads'] = "Not Specified"
     
-            if 'number_of_duplicates' in returnVal['data'] and returnVal['data']['number_of_duplicates'] is not None \
-                    and 'read_count' in returnVal['data'] \
-                    and returnVal['data']['read_count'] is not None:
-                info['duplicate_perc'] = int(returnVal['data']['number_of_duplicates']) / int(info['read_count'])
+            if returnVal['info'][2] == 'KBaseFile.PairedEndLibrary-2.2':
+                info['Type'] = 'Paired End'
+            elif returnVal['info'][2] == 'KBaseFile.SingleEndLibrary-2.2':
+                info['Type'] = 'Single End'
+    
+            if 'sequencing_tech' in returnVal['data']:
+                info['Platform'] = returnVal['data']['sequencing_tech']
             else:
-                info['duplicate_perc'] = ""
+                info['Platform'] = "Not Specified"
+    
+            if 'single_genome' in returnVal['data']:
+                if returnVal['data']['single_genome'] == 0:
+                    info['Single_Genome'] = 'No'
+                elif returnVal['data']['single_genome'] == 1:
+                    info['Single_Genome'] = 'Yes'
+            else:
+                info['Single_Genome'] = "Not Specified"
+    
+            if 'insert_size_mean' in returnVal['data']:
+                info['Insert_Size_Mean'] = str("{:,}".format(round(returnVal['data']['insert_size_mean'], 2)))
+            else:
+                info['Insert_Size_Mean'] = "Not Specified"
+    
+            if 'insert_size_std_dev' in returnVal['data']:
+                info['Insert_Size_Std_Dev'] = str("{:,}".format(round(returnVal['data']['insert_size_std_dev'], 2)))
+            else:
+                info['Insert_Size_Std_Dev'] = "Not Specified"
+    
+            if 'read_orientation_outward' in returnVal['data']:
+                if returnVal['data']['read_orientation_outward'] == 0:
+                    info['Outward_Read_Orientation'] = 'No'
+                elif returnVal['data']['read_orientation_outward'] == 1:
+                    info['Outward_Read_Orientation'] = 'Yes'
+            else:
+                info['Outward_Read_Orientation'] = "Not Specified"
+    
+            ##Stats
+            #Number_of_Reads
+            if 'total_bases' in returnVal['data']:
+                info['Total_Number_of_Bases'] = str("{:,}".format(returnVal['data']['total_bases']))
+            else:
+                info['Total_Number_of_Bases'] = "Not Specified"
+    
+            if 'read_length_mean' in returnVal['data']:
+                info['Mean_Read_Length'] = str("{:,}".format(round(returnVal['data']['read_length_mean'], 2)))
+            else:
+                info['Mean_Read_Length'] = "Not Specified"
+    
+            if 'read_length_stdev' in returnVal['data']:
+                info['Read_Length_Std_Dev'] = str("{:,}".format(round(returnVal['data']['read_length_stdev'], 2)))
+            else:
+                info['Read_Length_Std_Dev'] = "Not Specified"
+    
+            if 'number_of_duplicates' in returnVal['data'] and 'read_count' in returnVal['data']:
+                info['Number_of_Duplicate_Reads'] = str("{:,}".format(returnVal['data']['number_of_duplicates'])) + \
+                                                    "(" + str(
+                    returnVal['data']['number_of_duplicates'] / returnVal['data']['read_count']) + "%)"
+            else:
+                info['Number_of_Duplicate_Reads'] = "Not Specified"
+    
+            if 'phred_type' in returnVal['data']:
+                info['Phred_Type'] = str(returnVal['data']['phred_type'])
+            else:
+                info['Phred_Type'] = "Not Specified"
+    
+            if 'qual_mean' in returnVal['data'] and 'qual_stdev' in returnVal['data']:
+                info['Quality_Score_Mean_Std_Dev'] = str(round(returnVal['data']['qual_mean'], 2)) + "(" + str(
+                    round(returnVal['data']['qual_stdev'], 2)) + ")"
+            else:
+                info['Quality_Score_Mean_Std_Dev'] = "Not Specified"
+    
+            if 'qual_min' in returnVal['data'] and 'qual_max' in returnVal['data']:
+                info['Quality_Score_Min_Max'] = str(round(returnVal['data']['qual_min'], 2)) + "/" + str(
+                    round(returnVal['data']['qual_max'], 2))
+            else:
+                info['Quality_Score_Min_Max'] = "Not Specified"
+    
+            if 'gc_content' in returnVal['data']:
+                info['GC_Percentage'] = str(round(100 * returnVal['data']['gc_content'], 2)) + "%"
+            else:
+                info['GC_Percentage'] = "Not Specified"
+    
+            if 'base_percentages' in returnVal['data']:
+                info['Base_Percentages'] = "A(" + str(round(returnVal['data']['base_percentages']['A'], 2)) + "%), " + \
+                                           "C(" + str(round(returnVal['data']['base_percentages']['C'], 2)) + "%), " + \
+                                           "G(" + str(round(returnVal['data']['base_percentages']['G'], 2)) + "%), " + \
+                                           "T(" + str(round(returnVal['data']['base_percentages']['T'], 2)) + "%), " + \
+                                           "N(" + str(round(returnVal['data']['base_percentages']['N'], 2)) + "%)"
+            else:
+                info['Base_Percentages'] = "Not Specified"
 
         except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -395,11 +465,12 @@ class ReadsAPI:
             orig_error = ''.join('    ' + line for line in lines)
             raise ValueError('Error:\n' + orig_error)
         
-        #END get_reads_info_all
+        
+        #END get_reads_info_all_formatted
 
         # At some point might do deeper type checking...
         if not isinstance(info, dict):
-            raise ValueError('Method get_reads_info_all return value ' +
+            raise ValueError('Method get_reads_info_all_formatted return value ' +
                              'info is not type dict as required.')
         # return the results
         return [info]

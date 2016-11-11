@@ -238,7 +238,7 @@ class ReadsAPITest(unittest.TestCase):
         #objid = self.getImpl().get_id(self.getContext(), readssetparams)
         #readssetparams['id'] = objid[0]
         
-        result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
+        result = self.getImpl().get_reads_info_all_formatted(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_all_ok:')
         pprint(result)
         
@@ -266,7 +266,7 @@ class ReadsAPITest(unittest.TestCase):
         #objid = self.getImpl().get_id(self.getContext(), readssetparams)
         #readssetparams['id'] = objid[0]
         
-        result = self.getImpl().get_reads_info_all(self.getContext(), readssetparams)
+        result = self.getImpl().get_reads_info_all_formatted(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         
@@ -289,7 +289,7 @@ class ReadsAPITest(unittest.TestCase):
         params = {}
         params['workspace_obj_ref'] = objref
         
-        result = self.getImpl().get_reads_info_all(self.getContext(), params)
+        result = self.getImpl().get_reads_info_all_formatted(self.getContext(), params)
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         

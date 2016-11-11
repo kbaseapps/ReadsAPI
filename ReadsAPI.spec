@@ -26,75 +26,63 @@ module ReadsAPI {
 
     /* Reads info all
 
-       string id - id of object
-       string name - name of object
-       string workspace_name - name of workspace
-       string workspace_type - type of object
-       string sequencing_tech - technological platform used to generate data in this object
-       int single_genome -
+        string id
+        string Name;
+        string workspace_name
+        string Type
+        string Platform
+        string Single_Genome
 
-       string strain -
-       string source -
+        string Strain
+        string Source
 
-       string read_count -
-       string read_size -
-       string gc_content -
-       string read_length_mean -
-       string read_length_stdev -
-       string phred_type -
-       string number_of_duplicates -
-       string qual_min -
-       string qual_max -
-       string qual_mean -
-       string qual_stdev -
-       string base_percentages -
-       string duplicate_perc -
+        string Number_of_Reads
+        string Total_Number_of_Bases
+        string GC_Percentage
+        string Mean_Read_Length
+        string Read_Length_Std_Dev
+        string Phred_Type
+        string Number_of_Duplicate_Reads - number of duplicate and (%)
+        string Quality_Score - quality min and max X/ Y
+        string Quality_Score_Mean_Std_Dev - mean (st dev)
 
-       string interleaved -
-       string insert_size_mean -
-       string insert_size_std_dev -
-       string read_orientation_outward -
+        string Insert_Size_Mean
+        string Insert_Size_Std_Dev
+        string Outward_Read_Orientation
 
-       mapping<string, string> base_percentages -
+        string Base_Percentages - A (%), C(%), G (%), T (%), N (%)
 
-       @optional gc_content source strain read_count read_size single_genome
-       @optional read_length_mean read_length_stdev phred_type
-       @optional number_of_duplicates qual_min qual_max
-       @optional qual_mean qual_stdev base_percentages
-       @optional insert_size_mean insert_size_std_dev interleaved
-       @optional read_orientation_outward
-
+        @optional Single_Genome Strain Source Number_of_Reads Total_Number_of_Bases GC_Percentage
+        @optional Mean_Read_Length Read_Length_Std_Dev Phred_Type Number_of_Duplicate_Reads
+        @optional Quality_Score Quality_Score_Mean_Std_Dev
+        @optional Insert_Size_Mean Insert_Size_Std_Dev Outward_Read_Orientation Base_Percentages
 	*/
     typedef structure {
         string id;
-        string name;
+        string Name;
         string workspace_name;
-        string workspace_type;
-        string sequencing_tech;
-        int single_genome;
+        string Type;
+        string Platform;
+        string Single_Genome ;
 
-        string strain;
-        string source;
+        string Strain;
+        string Source;
 
-        string read_count;
-        string read_size;
-        string gc_content;
-        string read_length_mean;
-        string read_length_stdev;
-        string phred_type;
-        string number_of_duplicates;
-        string qual_min;
-        string qual_max;
-        string qual_mean;
-        string qual_stdev;
-        string duplicate_perc;
+        string Number_of_Reads;
+        string Total_Number_of_Bases;
+        string GC_Percentage;
+        string Mean_Read_Length;
+        string Read_Length_Std_Dev;
+        string Phred_Type;
+        string Number_of_Duplicate_Reads;
+        string Quality_Score;
+        string Quality_Score_Mean_Std_Dev;
 
-        string interleaved;
-        string insert_size_mean;
-        string insert_size_std_dev;
-        string read_orientation_outward;
+        string Insert_Size_Mean;
+        string Insert_Size_Std_Dev;
+        string Outward_Read_Orientation;
 
-        mapping<string, string> base_percentages;
+        string Base_Percentages;
     } ReadsInfoAll;
 
 

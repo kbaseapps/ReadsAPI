@@ -386,12 +386,14 @@ class ReadsAPI:
             else:
                 info['Single_Genome'] = "Not Specified"
     
-            if 'insert_size_mean' in returnVal['data']:
+            if 'insert_size_mean' in returnVal['data'] and returnVal['data']['insert_size_mean'] is not None:
+                #print "insert_size_mean "+returnVal['data']['insert_size_mean']
+                #print "insert_size_mean "+round(returnVal['data']['insert_size_mean'], 2)
                 info['Insert_Size_Mean'] = str("{:,}".format(round(returnVal['data']['insert_size_mean'], 2)))
             else:
                 info['Insert_Size_Mean'] = "Not Specified"
     
-            if 'insert_size_std_dev' in returnVal['data']:
+            if 'insert_size_std_dev' in returnVal['data'] and returnVal['data']['insert_size_std_dev'] is not None:
                 info['Insert_Size_Std_Dev'] = str("{:,}".format(round(returnVal['data']['insert_size_std_dev'], 2)))
             else:
                 info['Insert_Size_Std_Dev'] = "Not Specified"

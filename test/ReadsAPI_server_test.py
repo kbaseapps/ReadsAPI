@@ -241,16 +241,15 @@ class ReadsAPITest(unittest.TestCase):
         result = self.getImpl().get_reads_info_all_formatted(self.getContext(), readssetparams)
         print('RESULT test_get_reads_info_all_ok:')
         pprint(result)
-        
-        testresult = [
-            {'read_count': '25000', 'total_bases': '', 'insert_size_mean': 'None', 'qual_min': '10.0', 'strain': '',
-             'duplicate_perc': 0, 'number_of_duplicates': '792',
-             'base_percentages': "{u'A': 16.0727, u'C': 33.9538, u'T': 16.0, u'G': 33.9735, u'N': 0.0}",
-             'qual_max': '51.0', 'platform': u'seqtech-pr1', 'id': 1, 'source': '', 'single_genome': '1',
-             'qual_stdev': '10.545', 'read_orientation_outward': '0', 'phred_type': '33', 'read_length_stdev': '0.0',
-             'read_size': '2500000', 'qual_mean': '43.0493', 'read_length_mean': '100.0', 'insert_size_std_dev': 'None',
-             'name': u'test_paired_reads_eautils', 'workspace_name': u'' + str(ws_obj_names[2]), 'gc_content': '0.679273',
-             'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
+                
+        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': '33', 'Number_of_Duplicate_Reads': '792(0%)',
+                       'Name': u'test_paired_reads_eautils', 'Strain': 'Not Specified', 'GC_Percentage': '67.93%',
+                       'Type': 'Paired End', 'Read_Length_Std_Dev': '0.0', 'Insert_Size_Mean': 'Not Specified',
+                       'Quality_Score_Mean_Std_Dev': '43.05(10.54)', 'Mean_Read_Length': '100.0',
+                       'Quality_Score_Min_Max': '10.0/51.0', 'Total_Number_of_Bases': 'Not Specified',
+                       'Source': 'Not Specified', 'Base_Percentages': 'A(16.07%), C(33.95%), G(33.97%), T(16.0%), N(0.0%)',
+                       'Single_Genome': 'Yes', 'Platform': u'seqtech-pr1', 'workspace_name':u'' + str(ws_obj_names[2]),
+                       'Number_of_Reads': '25,000', 'id': 1, 'Outward_Read_Orientation': 'No'}]
         
         self.assertEqual(sorted(result), sorted(testresult))
     
@@ -270,13 +269,15 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         
-        testresult = [{'read_count': '', 'total_bases': '', 'insert_size_mean': '', 'qual_min': '', 'strain': '',
-                       'duplicate_perc': '', 'number_of_duplicates': '', 'base_percentages': '', 'qual_max': '',
-                       'platform': u'seqtech-pr1', 'id': 1, 'source': '', 'single_genome': '', 'qual_stdev': '',
-                       'read_orientation_outward': '', 'phred_type': '', 'read_length_stdev': '', 'read_size': '',
-                       'qual_mean': '', 'read_length_mean': '', 'insert_size_std_dev': '',
-                       'name': u'test_paired_reads_eautils', 'workspace_name': u'' + str(ws_obj_names[2]),
-                       'gc_content': '', 'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
+        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': 'Not Specified',
+                       'Number_of_Duplicate_Reads': 'Not Specified', 'Name': u'test_paired_reads_eautils',
+                       'Strain': 'Not Specified', 'GC_Percentage': 'Not Specified', 'Type': 'Paired End',
+                       'Read_Length_Std_Dev': 'Not Specified', 'Insert_Size_Mean': 'Not Specified',
+                       'Quality_Score_Mean_Std_Dev': 'Not Specified', 'Mean_Read_Length': 'Not Specified',
+                       'Quality_Score_Min_Max': 'Not Specified', 'Total_Number_of_Bases': 'Not Specified',
+                       'Source': 'Not Specified', 'Base_Percentages': 'Not Specified', 'Single_Genome': 'Not Specified',
+                       'Platform': u'seqtech-pr1', 'workspace_name': u'' + str(ws_obj_names[2]),
+                       'Number_of_Reads': 'Not Specified', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
         
         self.assertEqual(sorted(result), sorted(testresult))
     
@@ -293,12 +294,13 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         
-        testresult = [{'read_count': '', 'total_bases': '', 'insert_size_mean': '', 'qual_min': '', 'strain': '',
-                       'duplicate_perc': '', 'number_of_duplicates': '', 'base_percentages': '', 'qual_max': '',
-                       'platform': u'seqtech-pr1', 'id': 1, 'source': '', 'single_genome': '', 'qual_stdev': '',
-                       'read_orientation_outward': '', 'phred_type': '', 'read_length_stdev': '', 'read_size': '',
-                       'qual_mean': '', 'read_length_mean': '', 'insert_size_std_dev': '',
-                       'name': u'test_paired_reads_eautils', 'workspace_name': u'' + str(ws_obj_names[2]),
-                       'gc_content': '', 'workspace_type': u'KBaseFile.PairedEndLibrary-2.2'}]
-        
+        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': 'Not Specified',
+                        'Number_of_Duplicate_Reads': 'Not Specified', 'Name': u'test_paired_reads_eautils',
+                        'Strain': 'Not Specified', 'GC_Percentage': 'Not Specified', 'Type': 'Paired End',
+                        'Read_Length_Std_Dev': 'Not Specified', 'Insert_Size_Mean': 'Not Specified',
+                        'Quality_Score_Mean_Std_Dev': 'Not Specified', 'Mean_Read_Length': 'Not Specified',
+                        'Quality_Score_Min_Max': 'Not Specified', 'Total_Number_of_Bases': 'Not Specified',
+                        'Source': 'Not Specified', 'Base_Percentages': 'Not Specified', 'Single_Genome': 'Not Specified',
+                        'Platform': u'seqtech-pr1', 'workspace_name': u'' + str(ws_obj_names[2]),
+                        'Number_of_Reads': 'Not Specified', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
         self.assertEqual(sorted(result), sorted(testresult))

@@ -367,9 +367,9 @@ class ReadsAPI:
             else:
                 info['Number_of_Reads'] = "Not Specified"
             
-            if returnVal['info'][2].startsWith('KBaseFile.PairedEndLibrary'):
+            if str(returnVal['info'][2]).startsWith('KBaseFile.PairedEndLibrary'):
                 info['Type'] = 'Paired End'
-            elif returnVal['info'][2].startsWith('KBaseFile.SingleEndLibrary'):
+            elif str(returnVal['info'][2]).startsWith('KBaseFile.SingleEndLibrary'):
                 info['Type'] = 'Single End'
             
             if 'sequencing_tech' in returnVal['data']:

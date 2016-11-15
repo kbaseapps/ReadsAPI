@@ -6,6 +6,7 @@ import time
 import requests
 import string
 import random
+import shutil
 
 from os import environ
 
@@ -19,6 +20,12 @@ from pprint import pprint
 from biokbase.workspace.client import Workspace as workspaceService
 from ReadsAPI.ReadsAPIImpl import ReadsAPI
 from ReadsAPI.ReadsAPIServer import MethodContext
+
+from biokbase.AbstractHandle.Client import AbstractHandle as HandleService  # @UnresolvedImport
+from DataFileUtil.baseclient import ServerError as DFUError
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+from ReadsUtils.ReadsUtilsImpl import ReadsUtils
+from ReadsUtils.ReadsUtilsServer import MethodContext
 
 
 class ReadsAPITest(unittest.TestCase):
@@ -304,3 +311,34 @@ class ReadsAPITest(unittest.TestCase):
                         'Platform': u'seqtech-pr1', 'workspace_name': u'' + str(ws_obj_names[2]),
                         'Number_of_Reads': 'Not Specified', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
         self.assertEqual(sorted(result), sorted(testresult))
+
+
+    def test_upload_reads(self):
+        forwardf = 'small.forward_100.fq'
+        reversef = 'small.reverse_100.fq'
+        ftarget = os.path.join(self.scratch, forwardf)
+        shutil.copy('../test_data/' + forwardf, ftarget)
+        rtarget = os.path.join(self.scratch, reversef)
+        shutil.copy('../test_data/' + reversef, rtarget)
+        
+        ref = self.impl.upload_reads(
+            self.ctx, {'fwd_file': ftarget,
+                       'reverse_file': rtarget,
+                       'sequencing_tech': 'illumina',
+                       'wsname': self.ws_info[1],
+                       'name': 'filereads1'})
+        
+        obj = self.dfu.get_objects(
+            {'object_refs': [self.ws_info[1] + '/filereads1']})['data'][0]
+        
+        #self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
+        #self.assertEqual(obj['info'][2].startswith(
+        #    'KBaseFile.SingleEndLibrary'), True)
+        d = obj['data']
+        #self.assertEqual(d['sequencing_tech'], 'seqtech')
+        #self.assertEqual(d['single_genome'], 1)
+        #self.assertEqual('source' not in d, True)
+        #self.assertEqual('strain' not in d, True)
+        #self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz', 'f118ee769a5e1b40ec44629994dfc3cd')
+        node = d['lib']['file']['id']
+        self.delete_shock_node(node)

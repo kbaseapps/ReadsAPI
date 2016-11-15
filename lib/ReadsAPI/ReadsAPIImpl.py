@@ -425,7 +425,7 @@ class ReadsAPI:
             if 'number_of_duplicates' in returnVal['data'] and 'read_count' in returnVal['data']:
                 info['Number_of_Duplicate_Reads'] = str("{:,}".format(returnVal['data']['number_of_duplicates'])) + \
                                                     " (" + str(
-                    float(returnVal['data']['number_of_duplicates']) / float(returnVal['data']['read_count'])) + "%)"
+                    round(100.0 * (float(returnVal['data']['number_of_duplicates']) / float(returnVal['data']['read_count'])),2)) + "%)"
             else:
                 info['Number_of_Duplicate_Reads'] = "Not Specified"
             

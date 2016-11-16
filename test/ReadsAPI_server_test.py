@@ -69,11 +69,11 @@ class ReadsAPITest(unittest.TestCase):
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
-            print('Test workspace was deleted')
+            print('Test workspace 1 was deleted '+cls.wsName)
 
         try:
             cls.wsClient.delete_workspace({'workspace':  ReadsAPITest.testwsname})
-            print('Test workspace was deleted '+ReadsAPITest.testwsname)
+            print('Test workspace 2 was deleted '+ReadsAPITest.testwsname)
         except Exception as e:
             pass
             
@@ -312,11 +312,33 @@ class ReadsAPITest(unittest.TestCase):
 
             if ReadsAPITest.testwsname is None:
                 ReadsAPITest.testwsname = self.create_random_string()
-            #cls.wsName
+
+            token = environ.get('KB_AUTH_TOKEN', None)
+            
+            config_file = environ.get('KB_DEPLOYMENT_CONFIG', None)
+            cfg = {}
+            config = ConfigParser()
+            config.read(config_file)
+            for nameval in config.items('ReadsAPI'):
+                cfg[nameval[0]] = nameval[1]
+            wsURL = cfg['workspace-url']
+
+            wsClient = workspaceService(wsURL, token=token)
+            
+            try:
+                ret = wsClient.create_workspace({'workspace': ReadsAPITest.testwsname})  #test_ws_name
+            except Exception as e:
+                #print "ERROR"
+                #print(type(e))
+                #print(e.args)
+                #print(e)
+                pass
+            
             try:
                 print "attempt upload"
+                print "ftarget " + ftarget
                 ref = self.readsUtilClient.upload_reads(
-                    self.ctx, {'fwd_file': ftarget,
+                    {'fwd_file': ftarget,
                                'reverse_file': rtarget,
                                'sequencing_tech': 'illumina',
                                'wsname': ReadsAPITest.testwsname,#ReadsAPITest.test_ws_name,

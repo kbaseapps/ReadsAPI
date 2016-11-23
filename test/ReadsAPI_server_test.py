@@ -20,13 +20,10 @@ from pprint import pprint
 from biokbase.workspace.client import Workspace as workspaceService
 from ReadsAPI.ReadsAPIImpl import ReadsAPI
 from ReadsAPI.ReadsAPIServer import MethodContext
-
-from biokbase.AbstractHandle.Client import AbstractHandle as HandleService  # @UnresolvedImport
-from DataFileUtil.baseclient import ServerError as DFUError
-from DataFileUtil.DataFileUtilClient import DataFileUtil
-
 from ReadsUtils.ReadsUtilsClient import ReadsUtils
 
+from DataFileUtil.baseclient import ServerError as DFUError
+from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 class ReadsAPITest(unittest.TestCase):
     
@@ -42,6 +39,9 @@ class ReadsAPITest(unittest.TestCase):
             data='token={}&fields=user_id'.format(token)).json()['user_id']
         # WARNING: don't call any logging methods on the context object,
         # it'll result in a NoneType error
+        
+        cls.token = environ.get('KB_AUTH_TOKEN', None)
+        
         cls.ctx = MethodContext(None)
         cls.ctx.update({'token': token,
                         'user_id': user_id,
@@ -62,6 +62,9 @@ class ReadsAPITest(unittest.TestCase):
         cls.serviceImpl = ReadsAPI(cls.cfg)
         
         cls.scratch = cls.cfg['scratch']
+
+        cls.dfu = DataFileUtil(os.environ['SDK_CALLBACK_URL'], token=cls.token)
+        
         shutil.rmtree(cls.scratch)
         os.mkdir(cls.scratch)
     
@@ -70,19 +73,6 @@ class ReadsAPITest(unittest.TestCase):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace 1 was deleted '+cls.wsName)
-
-        try:
-            cls.wsClient.delete_workspace({'workspace':  ReadsAPITest.testwsname})
-            print('Test workspace 2 was deleted '+ReadsAPITest.testwsname)
-        except Exception as e:
-            pass
-            
-        try:
-            node = ReadsAPITest.testobjdata['data'][0]['lib']['file']['id']
-            cls.delete_shock_node(node)
-            print('Test shock data was deleted')
-        except Exception as e:
-            pass
     
     def getWsClient(self):
         return self.__class__.wsClient
@@ -111,8 +101,12 @@ class ReadsAPITest(unittest.TestCase):
         
         readssetparams = {}
         
-        readssetparams['workspace_id'] = ReadsAPITest.testobjdata['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['name'] =  ReadsAPITest.testobjdata['info'][1]#ws_obj_names[3]  #'ERR000916'
+        
+        print "test_get_id_ok"
+        print self.testobjdata['data'][0]['info']
+        
+        readssetparams['workspace_id'] = self.testobjdata['data'][0]['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['name'] =  self.testobjdata['data'][0]['info'][1]#ws_obj_names[3]  #'ERR000916'
         
         result = self.getImpl().get_id(self.getContext(), readssetparams)
         print('RESULT test_get_id_ok:')
@@ -127,8 +121,8 @@ class ReadsAPITest(unittest.TestCase):
         
         readssetparams = {}
         
-        readssetparams['workspace_id'] = ReadsAPITest.testobjdata['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['id'] = ReadsAPITest.testobjdata['info'][0]#ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = self.testobjdata['data'][0]['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['id'] = self.testobjdata['data'][0]['info'][0]#ws_obj_names[1]  #'ERR000916'
         
         #objid = self.getImpl().get_id(self.getContext(),readssetparams)
         #readssetparams['id'] = objid[0]
@@ -137,7 +131,7 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_name_ok:')
         pprint(result)
         
-        self.assertEqual(result, [u'test_paired_reads_eautils'])
+        self.assertEqual(result, [u'filereads1'])
     
     def test_get_type_ok(self):
         #ws_obj_names = self.load_test_data_ok()
@@ -146,8 +140,8 @@ class ReadsAPITest(unittest.TestCase):
         
         readssetparams = {}
         
-        readssetparams['workspace_id'] = ReadsAPITest.testobjdata['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
-        readssetparams['id'] = ReadsAPITest.testobjdata['info'][0]#ws_obj_names[1]  #'ERR000916'
+        readssetparams['workspace_id'] = self.testobjdata['data'][0]['info'][6]#ws_obj_names[0]  #'marcin:1475008857456'
+        readssetparams['id'] = self.testobjdata['data'][0]['info'][0]#ws_obj_names[1]  #'ERR000916'
         
         #objid = self.getImpl().get_id(self.getContext(), readssetparams)
         #readssetparams['id'] = objid[0]
@@ -156,7 +150,7 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_type_ok:')
         pprint(result)
         
-        self.assertEqual(result, [u'KBaseFile.PairedEndLibrary-2.2'])
+        self.assertEqual(result, [u'KBaseFile.SingleEndLibrary-2.2'])
     
     def create_random_string(self):
         N = 20
@@ -186,20 +180,27 @@ class ReadsAPITest(unittest.TestCase):
         #test_ws_name = self.create_random_string()
         test_obj_name = 'test_paired_reads_eautils'
         
+        print "self.testwsname "+ str(self.testwsname)
+
+        if self.testwsname is None:
+            self.testwsname = self.create_random_string()
+            
         try:
-            ret = wsClient.create_workspace({'workspace': ReadsAPITest.testwsname})#test_ws_name
+            ret = wsClient.create_workspace({'workspace': self.testwsname})#test_ws_name
+            print "created "+str(ret)
         except Exception as e:
             #print "ERROR"
             #print(type(e))
             #print(e.args)
-            #print(e)
+            print(e)
             pass
         
         summary_provenance = [{
             "description": "Saving object " + test_obj_name + " to WS"
         }]
         
-        summary_save_info = wsClient.save_objects({"workspace": ReadsAPITest.testwsname,#test_ws_name,
+        print "self.testwsname "+self.testwsname
+        summary_save_info = wsClient.save_objects({"workspace": self.testwsname,#test_ws_name,
                                                    "objects": [{"type": "KBaseFile.PairedEndLibrary",
                                                                 "data": data,
                                                                 "name": test_obj_name,
@@ -220,8 +221,8 @@ class ReadsAPITest(unittest.TestCase):
         
         readssetparams = {}
         
-        readssetparams['workspace_id'] =  ReadsAPITest.testobjdata['info'][6]#ws_obj_names[0]  #'kbasetest:1477429140721'
-        readssetparams['id'] =  ReadsAPITest.testobjdata['info'][0]#ws_obj_names[1]  #'test_paired_reads_eautils'
+        readssetparams['workspace_id'] =  self.testobjdata['data'][0]['info'][6]#ws_obj_names[0]  #'kbasetest:1477429140721'
+        readssetparams['id'] =  self.testobjdata['data'][0]['info'][0]#ws_obj_names[1]  #'test_paired_reads_eautils'
         
         #objid = self.getImpl().get_id(self.getContext(), readssetparams)
         #readssetparams['id'] = objid[0]
@@ -236,8 +237,18 @@ class ReadsAPITest(unittest.TestCase):
                        'Quality_Score_Mean_Std_Dev': '43.05 (10.54)', 'Mean_Read_Length': '100.0',
                        'Quality_Score_Min_Max': '10.0/51.0', 'Total_Number_of_Bases': 'Not Specified',
                        'Source': 'Not Specified', 'Base_Percentages': 'A(16.07%), C(33.95%), G(33.97%), T(16.0%), N(0.0%)',
-                       'Single_Genome': 'Yes', 'Platform': u'seqtech-pr1', 'workspace_name': u'' + ReadsAPITest.testobjdata['info'][7],
+                       'Single_Genome': 'Yes', 'Platform': u'seqtech-pr1', 'workspace_name': u'' + self.testobjdata['data'][0]['info'][7],
                        'Number_of_Reads': '25,000', 'id': 1, 'Outward_Read_Orientation': 'No'}]
+        
+        
+        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': '33', 'Number_of_Duplicate_Reads': '0 (0.0%)',
+                       'Name': u'filereads1', 'Strain': 'Not Specified', 'GC_Percentage': '65.71%', 'Type': 'Single End',
+                       'Read_Length_Std_Dev': '0.0', 'Insert_Size_Mean': 'Not Specified',
+                       'Quality_Score_Mean_Std_Dev': '44.68 (8.8)', 'Mean_Read_Length': '100.0',
+                       'Quality_Score_Min_Max': '10.0/51.0', 'Total_Number_of_Bases': '2,500',
+                       'Source': 'Not Specified', 'Base_Percentages': 'A(16.34%), C(31.77%), G(33.94%), T(17.94%), N(0.0%)',
+                       'Single_Genome': 'Yes', 'Platform': u'illumina', 'workspace_name': u'' + self.testobjdata['data'][0]['info'][7],
+                       'Number_of_Reads': '25', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
         
         self.assertEqual(sorted(result), sorted(testresult))
     
@@ -257,15 +268,13 @@ class ReadsAPITest(unittest.TestCase):
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
         
-        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': 'Not Specified',
-                       'Number_of_Duplicate_Reads': 'Not Specified', 'Name': u'test_paired_reads_eautils',
-                       'Strain': 'Not Specified', 'GC_Percentage': 'Not Specified', 'Type': 'Paired End',
-                       'Read_Length_Std_Dev': 'Not Specified', 'Insert_Size_Mean': 'Not Specified',
-                       'Quality_Score_Mean_Std_Dev': 'Not Specified', 'Mean_Read_Length': 'Not Specified',
-                       'Quality_Score_Min_Max': 'Not Specified', 'Total_Number_of_Bases': 'Not Specified',
-                       'Source': 'Not Specified', 'Base_Percentages': 'Not Specified', 'Single_Genome': 'Not Specified',
-                       'Platform': u'seqtech-pr1', 'workspace_name': u'' + str(ws_obj_names[2]),
-                       'Number_of_Reads': 'Not Specified', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
+        testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': 'Not Specified', 'Number_of_Duplicate_Reads': 'Not Specified',
+                        'Name': u'test_paired_reads_eautils', 'Strain': 'Not Specified', 'GC_Percentage': 'Not Specified', 'Type': 'Paired End',
+                        'Read_Length_Std_Dev': 'Not Specified', 'Insert_Size_Mean': 'Not Specified', 'Quality_Score_Mean_Std_Dev': 'Not Specified',
+                        'Mean_Read_Length': 'Not Specified', 'Quality_Score_Min_Max': 'Not Specified', 'Total_Number_of_Bases': 'Not Specified',
+                        'Source': 'Not Specified', 'Base_Percentages': 'Not Specified', 'Single_Genome': 'Not Specified', 'Platform': u'seqtech-pr1',
+                        'workspace_name': u'' + str(ws_obj_names[2]), 'Number_of_Reads': 'Not Specified', 'id': 2,
+                      'Outward_Read_Orientation': 'Not Specified'}]
         
         self.assertEqual(sorted(result), sorted(testresult))
     
@@ -281,7 +290,7 @@ class ReadsAPITest(unittest.TestCase):
         result = self.getImpl().get_reads_info_all_formatted(self.getContext(), params)
         print('RESULT test_get_reads_info_all_minimal:')
         pprint(result)
-        
+
         testresult = [{'Insert_Size_Std_Dev': 'Not Specified', 'Phred_Type': 'Not Specified',
                         'Number_of_Duplicate_Reads': 'Not Specified', 'Name': u'test_paired_reads_eautils',
                         'Strain': 'Not Specified', 'GC_Percentage': 'Not Specified', 'Type': 'Paired End',
@@ -290,13 +299,14 @@ class ReadsAPITest(unittest.TestCase):
                         'Quality_Score_Min_Max': 'Not Specified', 'Total_Number_of_Bases': 'Not Specified',
                         'Source': 'Not Specified', 'Base_Percentages': 'Not Specified', 'Single_Genome': 'Not Specified',
                         'Platform': u'seqtech-pr1', 'workspace_name': u'' + str(ws_obj_names[2]),
-                        'Number_of_Reads': 'Not Specified', 'id': 1, 'Outward_Read_Orientation': 'Not Specified'}]
+                        'Number_of_Reads': 'Not Specified', 'id': 2, 'Outward_Read_Orientation': 'Not Specified'}]
+        
         self.assertEqual(sorted(result), sorted(testresult))
 
 
     def upload_reads(self):
         
-        if ReadsAPITest.testobjref is None:
+        if self.testobjref is None:
             forwardf = 'small.forward_100.fq'
             reversef = 'small.reverse_100.fq'
             ftarget = os.path.join(self.scratch, forwardf)
@@ -308,10 +318,13 @@ class ReadsAPITest(unittest.TestCase):
             ret = shutil.copy('../test_data/' + reversef, rtarget)
             print ret
     
-            self.readsUtilClient = ReadsUtils()
+            self.readsUtilClient = ReadsUtils(os.environ['SDK_CALLBACK_URL'])
 
-            if ReadsAPITest.testwsname is None:
-                ReadsAPITest.testwsname = self.create_random_string()
+            if self.testwsname is None:
+                self.testwsname = self.create_random_string()
+                
+        
+            print "upload_reads self.testwsname "+self.testwsname
 
             token = environ.get('KB_AUTH_TOKEN', None)
             
@@ -326,12 +339,12 @@ class ReadsAPITest(unittest.TestCase):
             wsClient = workspaceService(wsURL, token=token)
             
             try:
-                ret = wsClient.create_workspace({'workspace': ReadsAPITest.testwsname})  #test_ws_name
+                ret = wsClient.create_workspace({'workspace': self.testwsname})  #test_ws_name
             except Exception as e:
                 #print "ERROR"
                 #print(type(e))
                 #print(e.args)
-                #print(e)
+                print(e)
                 pass
             
             try:
@@ -341,42 +354,57 @@ class ReadsAPITest(unittest.TestCase):
                     {'fwd_file': ftarget,
                                'reverse_file': rtarget,
                                'sequencing_tech': 'illumina',
-                               'wsname': ReadsAPITest.testwsname,#ReadsAPITest.test_ws_name,
+                               'wsname': self.testwsname,
                                'name': 'filereads1'})
-
-                #cls.read1ref = ru.upload_reads({
-                #    'fwd_file': fq_path,
-                #    'sequencing_tech': 'tech1',
-                #    'wsname': wsName,
-                #    'name': 'reads1',
-                #    'interleaved': 1
-                #})['obj_ref']
                 
                 print "test_upload_reads"
                 print ref
 
-                ReadsAPITest.testobjref = ReadsAPITest.test_ws_name + '/filereads1'#self.ws_info[1]
-                ReadsAPITest.testobjdata = self.dfu.get_objects(
-                    {'object_refs': [ReadsAPITest.testobjref]})#['data'][0]
+                self.testobjref = self.testwsname + '/filereads1'
+                self.testobjdata = self.dfu.get_objects(
+                    {'object_refs': [self.testobjref]})#['data'][0]
                 
-                print "ReadsAPITest.testobjdata"
-                print ReadsAPITest.testobjdata
-                #self.assertEqual(ref[0]['obj_ref'], self.make_ref(obj['info']))
-                #self.assertEqual(obj['info'][2].startswith(
-                #    'KBaseFile.SingleEndLibrary'), True)
-                #testobjdata = obj['data']
-                #self.assertEqual(d['sequencing_tech'], 'seqtech')
-                #self.assertEqual(d['single_genome'], 1)
-                #self.assertEqual('source' not in d, True)
-                #self.assertEqual('strain' not in d, True)
-                #self.check_lib(d['lib'], 2835, 'Sample1.fastq.gz', 'f118ee769a5e1b40ec44629994dfc3cd')
-                
+                print "self.testobjdata"
+                print self.testobjdata
+
             except Exception as e:
                 print e
                 pass
 
-            print "ReadsAPITest.testobjref"
-            print ReadsAPITest.testobjref
+            print "self.testobjref"
+            print self.testobjref
+            
+            
+    def test_zzz_cleanup(self):
+    
+        token = environ.get('KB_AUTH_TOKEN', None)
+    
+        config_file = environ.get('KB_DEPLOYMENT_CONFIG', None)
+        cfg = {}
+        config = ConfigParser()
+        config.read(config_file)
+        for nameval in config.items('ReadsAPI'):
+            cfg[nameval[0]] = nameval[1]
+        wsURL = cfg['workspace-url']
+        
+        wsClient = workspaceService(wsURL, token=token)
+
+        try:
+            wsClient.delete_workspace({'workspace': self.testwsname})
+            print('Test workspace 2 was deleted ' + self.testwsname)
+            pass
+        except Exception as e:
+            print e
+            pass
+    
+        try:
+            node = ReadsAPITest.testobjdata['data'][0]['lib']['file']['id']
+            self.self(node)
+            print('Test shock data was deleted')
+            pass
+        except Exception as e:
+            print e
+            pass
     
     @classmethod
     def delete_shock_node(cls, node_id):

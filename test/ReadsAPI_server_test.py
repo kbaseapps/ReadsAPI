@@ -27,10 +27,6 @@ from DataFileUtil.DataFileUtilClient import DataFileUtil
 
 class ReadsAPITest(unittest.TestCase):
     
-    testobjref = []
-    testobjdata = []
-    testwsname = []
-    testwsname2 = []
 
         
     @classmethod
@@ -69,38 +65,52 @@ class ReadsAPITest(unittest.TestCase):
         
         shutil.rmtree(cls.scratch)
         os.mkdir(cls.scratch)
-    
+
+        cls.testobjref = []
+        cls.testobjdata = []
+        cls.testwsname = []
+        cls.testwsname2 = []
+
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
+            print('Deleting workspace 1 ' + cls.wsName)
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace 1 was deleted '+cls.wsName)
 
-        #try:
-        #    cls.wsClient.delete_workspace({'workspace': cls.testwsname})
-        #    print('Test workspace 2 was deleted ' + cls.testwsname)
-        #    pass
-        #except Exception as e:
-        #    print e
-        #    pass
+        if hasattr(cls, 'testwsname'):
+            try:
+                print('Deleting workspace 2 ' + cls.testwsname[0])
+                cls.wsClient.delete_workspace({'workspace': cls.testwsname[0]})
+                print('Test workspace 2 was deleted ' + cls.testwsname[0])
+            except Exception as e:
+                print e
+                
+        if hasattr(cls, 'testwsname2'):
+            try:
+                print('Deleting workspace 3 ' + cls.testwsname2[0])
+                cls.wsClient.delete_workspace({'workspace': cls.testwsname2[0]})
+                print('Test workspace 3 was deleted ' + cls.testwsname2[0])
+            except Exception as e:
+                print e
 
-        #try:
-        #    cls.wsClient.delete_workspace({'workspace': cls.testwsname2})
-        #    print('Test workspace 2 was deleted ' + cls.testwsname2)
-        #    pass
-        #except Exception as e:
-        #    print e
-        #    pass
+        if hasattr(cls, 'testobjdata'):
+            try:
+                print('Deleting shock data '+str(len(cls.testobjdata)))
+                print('Deleting shock data '+str(cls.testobjdata[0]))
+                node = cls.testobjdata[0]['data'][0]['lib']['file']['id']
+                cls.delete_shock_node(node)
+                print('Test shock data was deleted')
+            except Exception as e:
+                print e
 
-            #try:
-        #    node = ReadsAPITest.testobjdata[0]['data'][0]['lib']['file']['id']
-        #    cls.self(node)
-        #    print('Test shock data was deleted')
-        #    pass
-        #except Exception as e:
-        #    print e
-        #    pass
-    
+    @classmethod
+    def delete_shock_node(cls, node_id):
+        header = {'Authorization': 'Oauth {0}'.format(cls.token)}
+        requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
+                        allow_redirects=True)
+        print('Deleted shock node ' + node_id)
+        
     def getWsClient(self):
         return self.__class__.wsClient
     
@@ -333,9 +343,9 @@ class ReadsAPITest(unittest.TestCase):
                 
                 print "test_upload_reads"
                 print ref
-                self.testobjref = []
+                #self.testobjref = []
                 self.testobjref.append(self.testwsname[0] + '/filereads1')
-                self.testobjdata = []
+                #self.testobjdata = []
                 self.testobjdata.append(self.dfu.get_objects(
                     {'object_refs': [self.testobjref[0]]}))#['data'][0]
                 
@@ -348,49 +358,3 @@ class ReadsAPITest(unittest.TestCase):
 
             print "self.testobjref[0]"
             print self.testobjref[0]
-            
-            
-    def test_zzz_cleanup(self):
-    
-        print "test_zzz_cleanup"
-        
-        print('cleanup workspace 2 ' + str(self.testwsname[0]))
-        print('cleanup workspace 3 ' + str(self.testwsname2[0]))
-        print 'cleanup self.testobjdata len '+ str(len(self.testobjdata))
-        
-        if len(self.testobjdata) > 0:
-            print('cleanup shock data was deleted '+str(self.testobjdata[0]['data'][0]['lib']['file']['id']))
-
-        try:
-            node = self.testobjdata[0]['data'][0]['lib']['file']['id']
-            self.delete_shock_node(node)
-            print('Test shock data was deleted')
-            pass
-        except Exception as e:
-            print e
-            pass
-
-
-        try:
-            self.wsClient.delete_workspace({'workspace': self.testwsname[0]})
-            print('Test workspace 2 was deleted ' + self.testwsname[0])
-            pass
-        except Exception as e:
-            print e
-            pass
-        
-        try:
-            self.wsClient.delete_workspace({'workspace': self.testwsname2[0]})
-            print('Test workspace 3 was deleted ' + self.testwsname2[0])
-            pass
-        except Exception as e:
-            print e
-            pass
-        
-        
-    @classmethod
-    def delete_shock_node(cls, node_id):
-        header = {'Authorization': 'Oauth {0}'.format(cls.token)}
-        requests.delete(cls.shockURL + '/node/' + node_id, headers=header,
-                        allow_redirects=True)
-        print('Deleted shock node ' + node_id)

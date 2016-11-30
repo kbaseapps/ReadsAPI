@@ -19,7 +19,7 @@ class ReadsAPI:
     Module Description:
     A KBase module: ReadsAPI
     '''
-    
+
     ######## WARNING FOR GEVENT USERS #######
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
@@ -28,7 +28,7 @@ class ReadsAPI:
     #########################################
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "10c645b8f48e5c4b8c2d954d335d30afe7d3693a"
+    GIT_COMMIT_HASH = "372ddebcd5b78b0cb413b43b246ae5f27f056e82"
     
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
@@ -264,7 +264,7 @@ class ReadsAPI:
         return [returnVal]
     
     #END_CLASS_HEADER
-    
+
     # config contains contents of config file in a hash or None if it couldn't
     # be found
     def __init__(self, config):
@@ -273,6 +273,7 @@ class ReadsAPI:
         #END_CONSTRUCTOR
         pass
     
+
     def get_reads_info_all_formatted(self, ctx, params):
         """
         Returns all info about this Reads object.
@@ -467,14 +468,14 @@ class ReadsAPI:
             raise ValueError('Error:\n' + orig_error)
         
         #END get_reads_info_all_formatted
-        
+
         # At some point might do deeper type checking...
         if not isinstance(info, dict):
             raise ValueError('Method get_reads_info_all_formatted return value ' +
                              'info is not type dict as required.')
         # return the results
         return [info]
-    
+
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK", 'message': "", 'version': self.VERSION,

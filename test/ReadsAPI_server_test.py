@@ -222,6 +222,14 @@ class ReadsAPITest(unittest.TestCase):
         if not self.testwsname2:
             self.testwsname2.append(self.create_random_string())
             
+        #try:
+        #    self.wsClient.get_workspace_info({'workspace':self.testwsname2[0]})
+        #    wsexist = 1
+        #except Exception as e:
+        #    wsexist = 0
+        #print "wsexist "+wsexist
+        
+        #if wsexist == 0:
         try:
             ret = self.wsClient.create_workspace({'workspace': self.testwsname2[0]})#test_ws_name
             print "created "+str(ret)
@@ -229,9 +237,9 @@ class ReadsAPITest(unittest.TestCase):
             #print "ERROR"
             #print(type(e))
             #print(e.args)
-            print(e)
+            #print(e)
             pass
-        
+    
         summary_provenance = [{
             "description": "Saving object " + test_obj_name + " to WS"
         }]

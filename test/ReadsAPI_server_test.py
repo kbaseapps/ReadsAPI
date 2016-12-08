@@ -73,12 +73,12 @@ class ReadsAPITest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if hasattr(cls, 'wsName'):
+        if hasattr(cls, 'wsName')  and len(cls.wsName) > 0:
             print('Deleting workspace 1 ' + cls.wsName)
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace 1 was deleted '+cls.wsName)
 
-        if hasattr(cls, 'testwsname'):
+        if hasattr(cls, 'testwsname')  and len(cls.testwsname) > 0:
             try:
                 print('Deleting workspace 2 ' + cls.testwsname[0])
                 cls.wsClient.delete_workspace({'workspace': cls.testwsname[0]})
@@ -86,7 +86,7 @@ class ReadsAPITest(unittest.TestCase):
             except Exception as e:
                 print e
                 
-        if hasattr(cls, 'testwsname2'):
+        if hasattr(cls, 'testwsname2') and len(cls.testwsname2) > 0:
             try:
                 print('Deleting workspace 3 ' + cls.testwsname2[0])
                 cls.wsClient.delete_workspace({'workspace': cls.testwsname2[0]})
@@ -97,6 +97,7 @@ class ReadsAPITest(unittest.TestCase):
         if hasattr(cls, 'testobjdata'):
             try:
                 print('Deleting shock data '+str(len(cls.testobjdata)))
+                print('Deleting shock data ' + str(len(cls.testobjdata[0]['data'][0])))
                 print('Deleting shock data '+str(cls.testobjdata[0]))
                 node = cls.testobjdata[0]['data'][0]['lib']['file']['id']
                 cls.delete_shock_node(node)

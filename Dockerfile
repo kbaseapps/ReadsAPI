@@ -9,7 +9,13 @@ MAINTAINER KBase Developer
 
 # -----------------------------------------
 
-RUN pip install --upgrade ndg-httpsclient
+RUN sudo apt-get install python-dev libffi-dev libssl-dev && \
+    pip install cffi --upgrade && \
+    pip install pyopenssl --upgrade && \
+    pip install --upgrade ndg-httpsclient && \
+    pip install pyasn1 --upgrade && \
+    pip install requests --upgrade &&  \
+    pip install 'requests[security]' --upgrade
 
 # update installed WS client (will now include get_objects2)
 RUN mkdir -p /kb/module && \

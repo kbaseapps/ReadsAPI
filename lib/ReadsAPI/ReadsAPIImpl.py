@@ -20,16 +20,16 @@ class ReadsAPI:
     A KBase module: ReadsAPI
     '''
 
-    ######## WARNING FOR GEVENT USERS #######
+    ######## WARNING FOR GEVENT USERS ####### noqa
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
-    #########################################
-    VERSION = "0.0.1"
-    GIT_URL = "https://github.com/kbaseapps/ReadsAPI"
-    GIT_COMMIT_HASH = "372ddebcd5b78b0cb413b43b246ae5f27f056e82"
-    
+    ######################################### noqa
+    VERSION = "0.0.2"
+    GIT_URL = "git@github.com:scanon/ReadsAPI.git"
+    GIT_COMMIT_HASH = "e01a6907f62e314dbd21a16fa4911a042379cdfa"
+
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
     workspaceURL = None
@@ -272,7 +272,7 @@ class ReadsAPI:
         self.workspaceURL = config['workspace-url']
         #END_CONSTRUCTOR
         pass
-    
+
 
     def get_reads_info_all_formatted(self, ctx, params):
         """
@@ -475,7 +475,6 @@ class ReadsAPI:
                              'info is not type dict as required.')
         # return the results
         return [info]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK", 'message': "", 'version': self.VERSION,

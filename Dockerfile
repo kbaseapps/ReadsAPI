@@ -6,6 +6,7 @@ MAINTAINER KBase Developer
 # any required dependencies for your module.
 
 RUN apt-get update -y
+RUN apt-get upgrade -y
 
 # -----------------------------------------
 

@@ -1,4 +1,4 @@
-FROM kbase/kbase:sdkbase.latest
+FROM kbase/sdkbase2:python
 MAINTAINER KBase Developer
 # -----------------------------------------
 
@@ -7,16 +7,16 @@ MAINTAINER KBase Developer
 
 RUN apt-get update
 RUN apt-get upgrade -y
-
+RUN pip install --upgrade pip
 # -----------------------------------------
 
 RUN sudo apt-get install -y python-dev libffi-dev libssl-dev 
 RUN pip install cffi --upgrade
-RUN pip install pyopenssl 
-RUN pip install  ndg-httpsclient 
-RUN pip install pyasn1 
-RUN pip install requests 
-RUN pip install 'requests[security]' 
+RUN pip install pyopenssl --upgrade 
+RUN pip install  ndg-httpsclient  --upgrade
+RUN pip install pyasn1 --upgrade
+RUN pip install requests  --upgrade 
+RUN pip install 'requests[security]' --upgrade 
 RUN rm /etc/ssl/certs/DST_Root_CA_X3.pem
 
 # update installed WS client (will now include get_objects2)

@@ -5,18 +5,19 @@ MAINTAINER KBase Developer
 # Insert apt-get instructions here to install
 # any required dependencies for your module.
 
-RUN apt-get update -y
+RUN apt-get update
 RUN apt-get upgrade -y
 
 # -----------------------------------------
 
 RUN sudo apt-get install -y python-dev libffi-dev libssl-dev 
 RUN pip install cffi --upgrade
-RUN pip install pyopenssl  
+RUN pip install pyopenssl 
 RUN pip install  ndg-httpsclient 
 RUN pip install pyasn1 
 RUN pip install requests 
 RUN pip install 'requests[security]' 
+RUN rm /etc/ssl/certs/DST_Root_CA_X3.pem
 
 # update installed WS client (will now include get_objects2)
 RUN mkdir -p /kb/module && \

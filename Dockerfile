@@ -5,9 +5,10 @@ MAINTAINER KBase Developer
 # Insert apt-get instructions here to install
 # any required dependencies for your module.
 
+RUN pip install --upgrade pip
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN pip install --upgrade pip
+
 # -----------------------------------------
 
 RUN sudo apt-get install -y python-dev libffi-dev libssl-dev 

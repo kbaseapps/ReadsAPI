@@ -6,19 +6,13 @@ MAINTAINER KBase Developer
 # any required dependencies for your module.
 
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN pip install --upgrade pip
+RUN apt-get update -y && apt-get upgrade -y &&  apt-get update -y
+RUN pip install --upgrade pip cffi pyopenssl ndg-httpsclient pyasn1 requests requests[security]
 
 # -----------------------------------------
 
 RUN sudo apt-get install -y python-dev libffi-dev libssl-dev 
-RUN pip install cffi --upgrade
-RUN pip install pyopenssl --upgrade 
-RUN pip install  ndg-httpsclient  --upgrade
-RUN pip install pyasn1 --upgrade
-RUN pip install requests  --upgrade 
-RUN pip install 'requests[security]' --upgrade 
+
 
 COPY ./ /kb/module
 RUN mkdir -p /kb/module/work

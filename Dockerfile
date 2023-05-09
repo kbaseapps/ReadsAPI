@@ -5,13 +5,15 @@ MAINTAINER KBase Developer
 # Insert apt-get instructions here to install
 # any required dependencies for your module.
 
-
-RUN apt-get update -y && apt-get upgrade -y &&  apt-get update -y
-RUN pip install --upgrade pip cffi pyopenssl ndg-httpsclient pyasn1 requests requests[security]
+RUN echo "deb http://security.debian.org/debian-security bullseye-security main contrib non-free" > /etc/apt/sources.list
+RUN apt-get update -y --allow-unauthenticated
+RUN apt-get upgrade -y --allow-unauthenticated 
+RUN apt-get update -y --allow-unauthenticated
+RUN pip install --upgrade pip
+RUN pip install --upgrade cffi pyopenssl ndg-httpsclient pyasn1 requests requests[security]
 
 # -----------------------------------------
 
-RUN sudo apt-get install -y python-dev libffi-dev libssl-dev 
 
 
 COPY ./ /kb/module
